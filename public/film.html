@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Плеер — Волнуй</title>
+  <link rel="icon" href="/img/logo-icon-blue.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/film.css">
+</head>
+<body>
+<div class="page">
+  <div id="site-header"></div>
+
+  <main>
+    <section class="film-hero">
+      <div class="film-hero__bubbles" data-bubbles="473,127,16;467,184,12;481,204,14;468,267,16;490,315,12;460,343,18;486,374,22;1112,127,18;1119,184,12;1106,204,14;1114,267,16;1104,315,14;1126,343,12;1102,374,20"></div>
+      <img class="film-hero__logo" src="/img/logo-white.png" alt="">
+      <button class="film-hero__play" id="play-btn" aria-label="Смотреть мультфильм">
+        <svg viewBox="0 0 40 50"><path d="M4 4.5v41a2 2 0 0 0 3 1.7l31-20.5a2 2 0 0 0 0-3.4L7 2.8a2 2 0 0 0-3 1.7z"/></svg>
+      </button>
+
+      <article class="film-info" id="film-info">
+        <p class="film-info__meta" data-f="meta">&nbsp;</p>
+        <h1 class="film-info__title" data-f="title">&nbsp;</h1>
+        <p class="film-info__author" data-f="author">&nbsp;</p>
+        <h2 class="film-info__h">О мультфильме</h2>
+        <p class="film-info__desc" data-f="short">&nbsp;</p>
+      </article>
+
+      <div class="film-more">
+        <span class="film-more__label">Еще</span>
+        <div class="film-more__row scroller" id="others"></div>
+      </div>
+
+      <div class="film-hero__btn"><button class="btn" id="more-btn" aria-expanded="false" aria-controls="film-details">Больше о мультфильме</button></div>
+    </section>
+
+    <section class="film-details" id="film-details" hidden>
+      <div class="film-details__inner">
+        <img class="film-details__poster" data-f="poster" alt="">
+        <div>
+          <h2 data-f="title2"></h2>
+          <p class="film-details__meta" data-f="meta2"></p>
+          <p data-f="full"></p>
+          <p class="film-details__status" data-f="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reviews" aria-labelledby="rev-title">
+      <img class="reviews__blob reviews__blob--l" src="/img/blob-left.svg" alt="">
+      <img class="reviews__blob reviews__blob--r" src="/img/blob-right.svg" alt="">
+      <h2 class="reviews__title" id="rev-title">Рецензия</h2>
+      <div class="reviews__grid" id="reviews"></div>
+      <div class="reviews__actions">
+        <button class="reviews__link" id="reviews-all" hidden>Показать все рецензии</button>
+        <button class="reviews__link" id="reviews-write">Написать рецензию</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/film.js"></script>
+</body>
+</html>

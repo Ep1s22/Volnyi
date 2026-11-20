@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ивенты — Волнуй</title>
+  <link rel="icon" href="/img/logo-icon-blue.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/events.css">
+</head>
+<body>
+<div class="page">
+  <div id="site-header"></div>
+
+  <main class="ev">
+    <img class="ev__back" src="/img/events-back.svg" alt="">
+
+    <section class="game" aria-labelledby="game-title">
+      <h1 class="game__title" id="game-title">Волнение</h1>
+
+      <div class="game__side game__side--l" aria-hidden="true">
+        <div class="game__side-inner">
+          <img class="game__side-face" src="/img/cards/back.jpg" alt="">
+          <img class="game__side-face game__side-face--reverse" src="/img/cards/back.jpg" alt="">
+        </div>
+      </div>
+      <div class="game__side game__side--r" aria-hidden="true">
+        <div class="game__side-inner">
+          <img class="game__side-face" src="/img/cards/back.jpg" alt="">
+          <img class="game__side-face game__side-face--reverse" src="/img/cards/back.jpg" alt="">
+        </div>
+      </div>
+
+      <div class="flip" id="flip">
+        <div class="flip__inner" id="flip-inner">
+          <div class="flip__face flip__front" id="flip-front"><span>Нажмите<br>«Крутить»</span></div>
+          <div class="flip__face flip__back"><img id="flip-img" alt=""><div class="flip__caption" id="flip-caption"></div></div>
+        </div>
+      </div>
+
+      <img class="ev__front" src="/img/events-front.svg" alt="">
+
+      <div class="game__controls">
+        <button class="btn game__btn" id="spin-btn">Крутить</button>
+        <p class="game__hint" id="spin-hint">&nbsp;</p>
+      </div>
+    </section>
+
+    <section class="archive" aria-labelledby="archive-title">
+      <h2 class="archive__title" id="archive-title">Архив</h2>
+      <div class="archive__wrap">
+        <div class="archive__track" aria-hidden="true"><div class="archive__thumb"></div></div>
+        <ul class="archive__list" id="archive"></ul>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/events.js"></script>
+</body>
+</html>

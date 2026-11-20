@@ -1,0 +1,14 @@
+{
+  "name": "volnuy-site",
+  "version": "1.0.0",
+  "description": "Сайт студии анимации «Волнуй»: HTML, CSS, JS + Node.js + SQLite",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/start.ps1",
+    "reset-db": "node -e \"require('fs').rmSync('db/volnuy.db',{force:true});console.log('БД удалена, при следующем запуске создастся заново')\""
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

@@ -1,0 +1,107 @@
+/* ===================== Страница мультфильма / плеер ===================== */
+
+/* Первый экран (макет: y 97–963, высота 866) */
+.film-hero {
+  position: relative; height: calc(866 * var(--u)); min-height: 520px;
+  background: linear-gradient(180deg, #284D98 0%, #284D98 28%, rgba(254,254,245,.65) 62%, #FEFEF5 90%, var(--cream) 100%);
+  color: var(--cream);
+}
+.film-hero__bubbles { position: absolute; inset: 0; color: #FEFEF5; pointer-events: none; }
+.film-hero__logo { position: absolute; left: calc(539 * var(--u)); top: calc(201 * var(--u)); width: calc(518 * var(--u)); opacity: .82; pointer-events: none; }
+.film-hero__play {
+  position: absolute; left: calc(750 * var(--u)); top: calc(269 * var(--u));
+  width: calc(95 * var(--u)); min-width: 56px; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(254,254,245,.75), rgba(254,254,245,.55) 45%, rgba(40,77,152,.75) 100%);
+  border: 0;
+  box-shadow: 0 10px 30px -8px rgba(40,77,152,.55), inset 0 0 18px rgba(254,254,245,.4);
+  display: grid; place-items: center;
+  transition: transform .32s var(--ease), box-shadow .32s var(--ease);
+  animation: pulse 2.6s ease-in-out infinite;
+}
+.film-hero__play svg { width: 36%; margin-left: 8%; fill: #FEFEF5; }
+.film-hero__play:hover { transform: scale(1.1); box-shadow: 0 14px 32px -10px rgba(40,77,152,.48), inset 0 0 18px rgba(254,254,245,.46); }
+@keyframes pulse { 50% { box-shadow: 0 10px 30px -8px rgba(40,77,152,.55), 0 0 0 12px rgba(254,254,245,.12), inset 0 0 18px rgba(254,254,245,.4); } }
+
+/* Стеклянная карточка с описанием */
+.film-info {
+  position: absolute; left: calc(71 * var(--u)); top: calc(447 * var(--u));
+  width: calc(589 * var(--u)); min-height: calc(320 * var(--u));
+  padding: calc(36 * var(--u)) calc(43 * var(--u)) calc(30 * var(--u));
+  border-radius: calc(16 * var(--u));
+  background: linear-gradient(160deg, rgba(40,77,152,.75), rgba(254,254,245,.55));
+  border: 0;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 20px 40px -24px rgba(40,77,152,.6);
+}
+.film-info p, .film-info h1, .film-info h2 { margin: 0; }
+.film-info__meta, .film-info__author, .film-info__h { font-size: max(13px, calc(20 * var(--u))); font-weight: 500; }
+.film-info__title { font-size: max(32px, calc(64 * var(--u))); font-weight: 700; line-height: 1.05; margin: calc(4 * var(--u)) 0 calc(18 * var(--u)) !important; }
+.film-info__h { margin-top: calc(26 * var(--u)) !important; }
+.film-info__desc { font-size: max(12px, calc(16 * var(--u))); margin-top: calc(10 * var(--u)) !important; line-height: 1.3; }
+
+/* «Еще» — лента других мультфильмов, уходит за правый край */
+.film-more { position: absolute; left: calc(906 * var(--u)); right: 0; top: calc(454 * var(--u)); }
+.film-more__label { font-size: max(13px, calc(20 * var(--u))); font-weight: 500; }
+.film-more__row { gap: calc(22 * var(--u)); padding: calc(18 * var(--u)) 0 calc(14 * var(--u)) calc(2 * var(--u)); }
+.film-more__row .poster { width: calc(163 * var(--u)); min-width: 96px; aspect-ratio: 163 / 229; border-radius: calc(4 * var(--u)); }
+.film-more__row .poster:hover { transform: translateY(-6px); }
+
+.film-hero__btn { position: absolute; left: 0; right: 0; top: calc(811 * var(--u)); text-align: center; }
+.film-hero__btn .btn { width: calc(516 * var(--u)); min-width: 240px; }
+
+/* Подробности (раскрываются кнопкой) */
+.film-details { padding: calc(40 * var(--u)) calc(141 * var(--u)) 0; animation: rise .5s var(--ease); }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+.film-details__inner { display: grid; grid-template-columns: calc(220 * var(--u)) 1fr; gap: calc(40 * var(--u)); background: var(--grey); border-radius: calc(30 * var(--u)); padding: calc(36 * var(--u)); color: var(--blue-m); }
+.film-details__poster { width: 100%; border-radius: 10px; min-width: 110px; }
+.film-details h2 { color: var(--blue); margin: 0 0 6px; font-size: max(20px, calc(32 * var(--u))); }
+.film-details p { margin: 0 0 12px; line-height: 1.55; font-size: max(14px, calc(18 * var(--u))); }
+.film-details__meta { font-weight: 600; }
+.film-details__status { display: inline-block; background: var(--blue-m); color: var(--cream); padding: 4px 12px; border-radius: 10px; font-size: 14px !important; }
+
+/* Рецензии (y 1052–1432) */
+.reviews { position: relative; padding: calc(89 * var(--u)) calc(141 * var(--u)) calc(170 * var(--u)); }
+.reviews__blob { position: absolute; pointer-events: none; }
+.reviews__blob--l { left: 0; top: calc(37 * var(--u)); width: calc(438 * var(--u)); }
+.reviews__blob--r { right: 0; bottom: calc(-12 * var(--u)); width: calc(558 * var(--u)); }
+.reviews__title { position: relative; text-align: center; margin: 0 0 calc(56 * var(--u)); font-size: max(20px, calc(26 * var(--u))); font-weight: 700; }
+.reviews__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: calc(34 * var(--u)) calc(64 * var(--u)); }
+.review {
+  min-height: calc(132 * var(--u)); background: var(--grey); color: var(--blue-m);
+  border-radius: calc(20 * var(--u)); padding: calc(13 * var(--u)) calc(28 * var(--u)) calc(20 * var(--u));
+  animation: rise .5s var(--ease) both;
+}
+.review h3 { margin: 0 0 calc(16 * var(--u)); font-size: max(14px, calc(20 * var(--u))); font-weight: 700; }
+.review p { margin: 0; font-size: max(12px, calc(16 * var(--u))); text-align: justify; line-height: 1.25; }
+.review.is-collapsed p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+.review time { display: block; margin-top: 8px; font-size: 11px; opacity: .7; }
+.reviews__empty { grid-column: 1 / -1; text-align: center; color: var(--blue-m); }
+.reviews__actions { position: relative; display: flex; justify-content: center; gap: 28px; margin-top: calc(36 * var(--u)); }
+.reviews__link { color: var(--blue-m); font-weight: 600; font-size: max(13px, calc(18 * var(--u))); border-bottom: 1.5px dashed currentColor; }
+.reviews__link:hover { color: var(--blue); }
+
+/* Плеер */
+.player .modal__box { width: min(960px, 100%); padding: 0; background: #284D98; overflow: hidden; }
+.player video { width: 100%; display: block; background: #284D98; aspect-ratio: 16 / 9; }
+.player__soon { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; padding: 34px; color: var(--cream); }
+.player__soon img { border-radius: 12px; width: 100%; }
+.player__soon h3 { color: var(--cream); font-size: 28px; }
+.player__soon p { color: #FEFEF5; }
+.player .modal__close { color: var(--cream); z-index: 2; }
+.player .modal__close:hover { background: rgba(254,254,245,.12); }
+
+@media (max-width: 760px) {
+  .film-hero { height: auto; padding: 30px 20px 30px; display: flex; flex-direction: column; gap: 20px; }
+  .film-hero__logo { position: relative; inset: auto; width: 80%; margin: 0 auto; }
+  .film-hero__play { left: 50%; top: 40px; transform: translateX(-50%); }
+  .film-hero__play:hover { transform: translateX(-50%) scale(1.1); }
+  .film-info, .film-more, .film-hero__btn { position: relative; inset: auto; width: 100%; }
+  .film-info { padding: 22px; }
+  .film-details { padding: 24px 20px 0; }
+  .film-details__inner { grid-template-columns: 1fr; }
+  .film-details__poster { width: 50%; }
+  .reviews { padding: 50px 20px 90px; }
+  .reviews__grid { grid-template-columns: 1fr; gap: 16px; }
+  .player__soon { grid-template-columns: 1fr; }
+  .player__soon img { width: 50%; }
+}

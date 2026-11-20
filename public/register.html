@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Регистрация — Волнуй</title>
+  <link rel="icon" href="/img/logo-icon-blue.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+<div class="page pattern-bg">
+  <div id="site-header"></div>
+
+  <main class="auth">
+    <form class="auth__panel" id="auth-form" data-mode="register" novalidate>
+      <div class="auth__card">
+        <h1 class="sr-only">Регистрация</h1>
+        <div class="auth__tabs"><a href="/login">Вход</a><b>/</b><a href="/register" class="is-active">Регистрация</a></div>
+        <label class="field"><input name="email" type="email" autocomplete="email" required><span>Почта</span></label>
+        <label class="field"><input name="password" type="password" autocomplete="new-password" minlength="6" required><span>Пароль</span></label>
+        <label class="field"><input name="password2" type="password" autocomplete="new-password" required><span>Повторите пароль</span></label>
+        <p class="auth__error" id="auth-error" role="alert"></p>
+      </div>
+      <button class="auth__submit" type="submit">Зарегистрироваться</button>
+    </form>
+  </main>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>

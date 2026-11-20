@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: volnuy-site
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: DB_DIR
+        value: /var/data
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    disk:
+      name: volnuy-data
+      mountPath: /var/data
+      sizeGB: 1

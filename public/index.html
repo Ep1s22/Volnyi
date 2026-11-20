@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Волнуй — студия анимации</title>
+  <meta name="description" content="Платформа для просмотра короткометражных анимационных мультфильмов студии «Волнуй».">
+  <link rel="icon" href="/img/logo-icon-blue.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+<div class="page">
+  <div id="site-header"></div>
+
+  <main>
+    <!-- ============ Первый экран ============ -->
+    <section class="hero">
+      <a class="hero__phone" href="/film" aria-label="Смотреть мультфильм"><img src="/img/phone.png" alt=""></a>
+      <img class="hero__deco" src="/img/hero-deco.png" alt="">
+      <img class="hero__wave-text" src="/img/wave-text.png" alt="Волна твоей эпохи">
+      <div class="hero__content">
+        <h1 class="hero__logo"><img src="/img/logo-blue.png" alt="Волнуй — студия анимации"></h1>
+        <p class="hero__tagline">Платформа для просмотра&nbsp; короткометражных анимационных&nbsp; мультфильмов</p>
+        <a class="btn btn--dark hero__btn" href="/film">Смотреть</a>
+      </div>
+    </section>
+
+    <!-- ============ Синий блок: ценности, новости, каталог ============ -->
+    <div class="ocean">
+      <section class="values reveal" aria-label="О студии">
+        <img class="values__bg" src="/img/logo-white.png" alt="">
+        <div class="values__track" aria-hidden="true"><div class="values__thumb"></div></div>
+        <div class="values__list" tabindex="0">
+          <p class="values__item">Наши ценности: современность, рефлексия, социальное сравнение, самовыражение, открытость.</p>
+          <p class="values__item">Анимационный контент выступает внутренним зеркалом и неким наставником подростка 21 века, помогая ему разобраться в своих чувствах и определить собственное “я” в жизни через самопознание.</p>
+          <p class="values__item">Мы снимаем короткометражные мультфильмы: одна история — один вечер, но мысли о ней остаются надолго.</p>
+          <p class="values__item">Каждый зритель может стать частью студии: оставлять рецензии, собирать карточки в ивентах и поддерживать кассовый сбор.</p>
+        </div>
+      </section>
+
+      <section class="news reveal" aria-labelledby="news-title">
+        <div class="news__card">
+          <span class="news__hole"></span>
+          <div class="news__image"><img id="news-image" src="/img/posters/vodovorot.jpg" alt=""></div>
+        </div>
+        <div class="news__side">
+          <h2 id="news-title" class="news__title">Новости</h2>
+          <ul class="news__list" id="news-list"><!-- из БД --></ul>
+        </div>
+      </section>
+
+      <section class="catalog reveal" aria-labelledby="catalog-title">
+        <h2 id="catalog-title" class="catalog__title">Каталог</h2>
+        <div class="catalog__row scroller" id="catalog-list" tabindex="0" aria-label="Каталог мультфильмов — перетаскивайте карточки или используйте стрелки"></div>
+        <div class="catalog__btn"><a class="btn" href="/film">Смотреть</a></div>
+      </section>
+
+      <img class="ocean__bottom" src="/img/blue-bottom.svg" alt="">
+    </div>
+
+    <!-- ============ Кассовый сбор ============ -->
+    <section class="fund" aria-labelledby="fund-title">
+      <h2 id="fund-title" class="fund__title reveal">Кассовый сбор</h2>
+      <div class="fund__shell-wrap reveal" aria-label="Ракушка-копилка">
+        <img class="fund__shell is-active" src="/img/shell.png" alt="">
+        <img class="fund__shell" src="/img/racyska4.png" alt="">
+        <img class="fund__shell" src="/img/racyska3.png" alt="">
+        <img class="fund__shell" src="/img/racyska2.png" alt="">
+      </div>
+      <button class="btn fund__btn" id="fund-btn">Поддержать студию</button>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>

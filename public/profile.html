@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Профиль — Волнуй</title>
+  <link rel="icon" href="/img/logo-icon-blue.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+<div class="page">
+  <div id="site-header"></div>
+
+  <main class="profile" id="profile" data-bubbles="103,1116,18;80,1215,22;113,1280,24;86,1361,28;116,1453,30;74,1513,36;107,1601,40;80,1695,46;1493,1116,18;1516,1215,22;1483,1280,24;1510,1361,28;1481,1453,30;1522,1513,36;1489,1601,40;1519,1695,46">
+    <section class="profile-hero">
+      <div class="profile-hero__orbit profile-hero__orbit--1">
+        <img class="profile-hero__ghost profile-hero__ghost--1" src="/img/ghost1.svg" alt="">
+      </div>
+      <div class="profile-hero__avatar"><img id="avatar" src="/img/avatar.svg" alt="Аватар"></div>
+      <div class="profile-hero__orbit profile-hero__orbit--2">
+        <img class="profile-hero__ghost profile-hero__ghost--2" src="/img/ghost2.svg" alt="">
+      </div>
+      <h1 class="profile-hero__name" id="p-name">&nbsp;</h1>
+      <p class="profile-hero__nick" id="p-nick">&nbsp;</p>
+      <div class="profile-hero__actions">
+        <button class="btn btn--small" id="edit-btn">Редактировать</button>
+      </div>
+    </section>
+
+    <section class="level">
+      <div class="level__row"><span id="p-level">Уровень 1</span><span id="p-xp">0/100</span></div>
+      <div class="level__bar"><i id="p-bar"></i></div>
+      <p class="level__hint">Опыт начисляется за просмотры, рецензии и карточки из ивентов</p>
+    </section>
+
+    <section class="cards">
+      <h2 class="section-title">Полученные карточки <small id="cards-count"></small></h2>
+      <div class="cards__wrap">
+        <button class="cards__arrow" data-dir="-1" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+        <div class="cards__row scroller" id="cards"></div>
+        <button class="cards__arrow" data-dir="1" aria-label="Вперёд"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+      </div>
+    </section>
+
+    <section class="viewed">
+      <h2 class="section-title">Просмотрено</h2>
+      <div class="viewed__grid" id="viewed"></div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/profile.js"></script>
+</body>
+</html>
