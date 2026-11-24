@@ -66,7 +66,7 @@
 }
 
 /* Новости (y 1672–2504). Карточка 1171×631 повёрнута на 10.4° */
-.news { position: relative; height: calc(832 * var(--u)); margin-top: calc(115 * var(--u)); }
+.news { position: relative; height: calc(852 * var(--u)); margin-top: calc(115 * var(--u)); }
 .news__card {
   position: absolute; width: calc(1171 * var(--u)); height: calc(631 * var(--u));
   left: calc((944 - 162 - 585.5) * var(--u)); top: calc((2088 - 1672 - 315.5) * var(--u));
@@ -78,8 +78,8 @@
 .news__image { position: absolute; left: calc(108 * var(--u)); top: calc(58 * var(--u)); width: calc(351 * var(--u)); height: calc(515 * var(--u)); background: var(--blue); overflow: hidden; }
 .news__image img { width: 100%; height: 100%; object-fit: cover; transition: opacity .35s, transform .6s var(--ease); }
 .news__image img.is-fading { opacity: 0; transform: scale(1.05); }
-.news__side { position: absolute; z-index: 1; left: calc(800 * var(--u)); top: calc(150 * var(--u)); width: calc(627 * var(--u)); }
-.news__title { margin: 0 0 calc(44 * var(--u)) calc(1 * var(--u)); font-size: max(22px, calc(48 * var(--u))); font-weight: 700; color: var(--blue); }
+.news__side { position: absolute; z-index: 1; left: calc(800 * var(--u)); top: calc(240 * var(--u)); width: calc(627 * var(--u)); }
+.news__title { margin: 0 0 calc(44 * var(--u)) calc(1 * var(--u)); font-size: max(22px, calc(48 * var(--u))); font-weight: 700; color: var(--blue-d); }
 .news__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: calc(58 * var(--u)); }
 .news__item {
   min-height: calc(132 * var(--u)); background: var(--grey); color: var(--blue);
