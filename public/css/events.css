@@ -101,10 +101,10 @@
   .game__side { top: 190px; width: 26%; }
   .game__side--l { left: 3%; } .game__side--r { left: auto; right: 3%; }
   .ev__front { top: 0; height: auto; }
+  .ev__back { top: calc(640px - 1116 * var(--gu)); }
   .flip { left: 50%; transform: translateX(-50%); top: 110px; width: 52%; }
   .game__controls { top: 520px; }
   .ev { background: linear-gradient(180deg, var(--cream) 0, rgba(40,77,152,.35) 260px, #284D98 520px, #284D98 640px, var(--cream) 640px); }
-  .ev__back { display: none; }
   .archive__wrap { padding: 0 20px 0 50px; width: 100%; }
   .archive__track { left: 20px; }
   .archive__list { gap: 20px; }

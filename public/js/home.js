@@ -215,9 +215,9 @@ $('#fund-btn').addEventListener('click', () => {
   const m = openModal(`
     <div class="qr-modal">
       <h3>Поддержать студию</h3>
-      <img src="/img/qr-code.png" alt="QR-код для оплаты">
+      <img src="/img/qr-cod.jpg" alt="QR-код для оплаты">
     </div>`);
-  // если файла qr-code.png нет в public/img — вместо «битой» картинки показываем текст
+  // Если QR-кода нет в public/img — вместо «битой» картинки показываем текст.
   const qr = $('.qr-modal img', m);
   qr.addEventListener('error', () => qr.replaceWith(Object.assign(document.createElement('p'), { textContent: 'QR-код для оплаты скоро появится. Спасибо, что хотите поддержать студию!' })), { once: true });
 });
