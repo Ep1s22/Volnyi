@@ -175,7 +175,7 @@
 
 /* ---------- Облака-векторы на первом экране (Vector1 — слева, Vector2 — справа сверху) ---------- */
 .hero__cloud { position: absolute; z-index: 5; max-width: none; pointer-events: none; }
-.hero__cloud--1 { left: -1.9%; top: 65%; width: calc(104% * 539 / 1920); transform: translateX(-40%); }
+.hero__cloud--1 { top: 65%; width: calc(40% * 539 / 539); transform: translateX(-40%); }
 .hero__cloud--2 { right: -2%; top: 3.5%; width: calc(104% * 786 / 1920); }
 .hero__content { z-index: 4; }
 
@@ -190,8 +190,8 @@
 .hero__wave-text { display: none; }
 @media (max-width: 760px) {
   /* на телефоне волна крупнее: картинка в 1,5 раза шире экрана, прижата вправо, левый край обрезается */
-  .hero { min-height: 560px; }
-  .hero__deco { left: auto; right: 0; bottom: 0; width: 150%; transform-origin: 100% 100%; transform: translateY(9%); }
+  .hero { min-height: 378px; }
+  .hero__deco { left: auto; right: -13%; bottom: 0; width: 150%; transform-origin: 100% 100%; transform: translateY(9%); }
 }
 
 
