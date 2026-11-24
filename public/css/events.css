@@ -17,7 +17,7 @@
     #284D98 calc(1001 * var(--gu) + var(--drop)), var(--cream) calc(1001 * var(--gu) + var(--drop)));
 }
 /* волны растягиваются на всю ширину, высота — по --gu (совпадает с картами) */
-.ev__back { position: absolute; left: 0; top: calc(-107 * var(--gu) + var(--drop)); width: 100%; height: calc(1560 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; }
+.ev__back { position: absolute; left: 0; top: calc(-109 * var(--gu) + var(--drop)); width: 100%; height: calc(1560 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; }
 .ev__ghost { position: absolute; left: 0; top: calc(-59 * var(--gu) + var(--drop)); width: 100%; height: calc(1503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none;  }
 .ev__front { position: absolute; left: 0; top: calc(-76 * var(--gu)); width: 100%; height: calc(503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; z-index: 3; }
 
