@@ -1,43 +1,50 @@
 /* ============================ Профиль ============================ */
 const RARITY = { common: 'Обычная', rare: 'Редкая', legendary: 'Легендарная' };
 
+/* Духи вокруг аватара: при наведении крутятся по кругу (по часовой стрелке),
+   при уходе мыши плавно тормозят в ту же сторону, а не откатываются назад. */
 const profileHero = $('.profile-hero');
 const avatarArea = $('.profile-hero__avatar');
+const orbits = $$('.profile-hero__orbit');
+const SPIN_MS = 9000;                       // один оборот при наведении
+const SPEED = 360 / SPIN_MS;                // градусов в миллисекунду
+const STOP_MS = 1400;                       // время торможения
+// easeOutCubic начинается со скоростью ×3 от средней — подбираем путь так,
+// чтобы скорость в момент остановки совпала со скоростью вращения (без рывка)
+const STOP_DEG = (SPEED * STOP_MS) / 3;
+
+const angleOf = (el) => parseFloat(getComputedStyle(el).rotate) || 0;
+// запоминаем текущий угол и снимаем анимации — дух остаётся там, где был
+function freeze(orbit) {
+  const angle = angleOf(orbit);
+  orbit.getAnimations().forEach((an) => an.cancel());
+  orbit.style.rotate = `${angle}deg`;
+  return angle;
+}
+
 avatarArea.addEventListener('pointerenter', (event) => {
-  if (event.pointerType === 'mouse') {
-    profileHero.classList.add('profile-hero--ghosts-active');
-    profileHero.querySelectorAll('.profile-hero__orbit').forEach((orbit, index) => {
-      orbit.getAnimations().forEach((animation) => animation.cancel());
-      const currentAngle = parseFloat(getComputedStyle(orbit).rotate) || 0;
-      orbit.style.rotate = `${currentAngle}deg`;
-      orbit.animate(
-        [
-          { rotate: `${currentAngle}deg` },
-          { rotate: `${currentAngle + 360}deg` }
-        ],
-        { duration: 9000, iterations: Infinity, easing: 'linear' }
-      );
-    });
-  }
+  if (event.pointerType !== 'mouse') return;
+  profileHero.classList.add('profile-hero--ghosts-active');
+  orbits.forEach((orbit) => {
+    const angle = freeze(orbit);
+    orbit.animate([{ rotate: `${angle}deg` }, { rotate: `${angle + 360}deg` }],
+      { duration: SPIN_MS, iterations: Infinity, easing: 'linear' });
+  });
 });
+
 avatarArea.addEventListener('pointerleave', (event) => {
-  if (event.pointerType === 'mouse') {
-    profileHero.querySelectorAll('.profile-hero__orbit').forEach((orbit, index) => {
-      const current = getComputedStyle(orbit).rotate;
-      const currentAngle = parseFloat(current) || 0;
-      if (orbit.getAnimations().length) orbit.getAnimations().forEach((animation) => animation.cancel());
-      orbit.style.rotate = `${currentAngle}deg`;
-      const stop = orbit.animate(
-        [{ rotate: `${currentAngle}deg` }, { rotate: `${currentAngle + (index === 0 ? 18 : -18)}deg` }],
-        { duration: 700, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'forwards' }
-      );
-      stop.finished.then(() => {
-        orbit.style.rotate = `${currentAngle + (index === 0 ? 18 : -18)}deg`;
-        stop.cancel();
-      }).catch(() => {});
-    });
-    profileHero.classList.remove('profile-hero--ghosts-active');
-  }
+  if (event.pointerType !== 'mouse') return;
+  profileHero.classList.remove('profile-hero--ghosts-active');
+  orbits.forEach((orbit) => {
+    const angle = freeze(orbit);
+    const end = angle + STOP_DEG;             // та же сторона, что и вращение
+    const stop = orbit.animate([{ rotate: `${angle}deg` }, { rotate: `${end}deg` }],
+      { duration: STOP_MS, easing: 'cubic-bezier(.33, 1, .68, 1)', fill: 'forwards' });
+    stop.finished.then(() => {
+      orbit.style.rotate = `${end % 360}deg`;
+      stop.cancel();
+    }).catch(() => {});
+  });
 });
 
 function renderUser(u) {

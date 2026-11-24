@@ -265,10 +265,34 @@ const MIME = {
 // «Красивые» адреса страниц
 const PAGES = { '/': 'index.html', '/film': 'film.html', '/profile': 'profile.html', '/events': 'events.html', '/login': 'index.html', '/register': 'index.html' };
 
-function serveFile(res, file, status = 200) {
+function serveFile(res, file, status = 200, req = null) {
+  const type = MIME[path.extname(file).toLowerCase()] || 'application/octet-stream';
+  // Видео отдаём потоком и с поддержкой Range — иначе браузер не может перематывать ролик
+  if (req && type.startsWith('video/')) {
+    return fs.stat(file, (err, st) => {
+      if (err) return serve404(res);
+      const size = st.size;
+      const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+      let start = 0, end = size - 1, code = 200;
+      if (m) {
+        if (m[1] === '' && m[2] !== '') { start = Math.max(0, size - Number(m[2])); }
+        else { start = Number(m[1] || 0); if (m[2] !== '') end = Math.min(Number(m[2]), size - 1); }
+        if (start > end || start >= size) {
+          res.writeHead(416, { 'Content-Range': `bytes */${size}` });
+          return res.end();
+        }
+        code = 206;
+      }
+      const headers = { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': end - start + 1 };
+      if (code === 206) headers['Content-Range'] = `bytes ${start}-${end}/${size}`;
+      res.writeHead(code, headers);
+      if (req.method === 'HEAD') return res.end();
+      fs.createReadStream(file, { start, end }).on('error', () => res.destroy()).pipe(res);
+    });
+  }
   fs.readFile(file, (err, data) => {
     if (err) return serve404(res);
-    res.writeHead(status, { 'Content-Type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream' });
+    res.writeHead(status, { 'Content-Type': type });
     res.end(data);
   });
 }
@@ -303,7 +327,7 @@ const server = http.createServer(async (req, res) => {
 
   const file = path.normalize(path.join(PUBLIC, pathname));
   if (!file.startsWith(PUBLIC + path.sep)) return serve404(res);   // защита от ../
-  fs.stat(file, (err, st) => (err || !st.isFile() ? serve404(res) : serveFile(res, file)));
+  fs.stat(file, (err, st) => (err || !st.isFile() ? serve404(res) : serveFile(res, file, 200, req)));
 });
 
 server.on('error', (err) => {

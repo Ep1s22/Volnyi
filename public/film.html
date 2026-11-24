@@ -13,11 +13,18 @@
   <div id="site-header"></div>
 
   <main>
-    <section class="film-hero">
+    <section class="film-hero" id="film-hero">
+      <!-- Экран плеера: появляется после нажатия Play -->
+      <div class="film-hero__screen" id="screen">
+        <video id="video" playsinline preload="metadata"></video>
+        <div class="film-hero__shade"></div>
+      </div>
+
       <div class="film-hero__bubbles" data-bubbles="473,127,16;467,184,12;481,204,14;468,267,16;490,315,12;460,343,18;486,374,22;1112,127,18;1119,184,12;1106,204,14;1114,267,16;1104,315,14;1126,343,12;1102,374,20"></div>
+      <div class="film-hero__burst" id="burst" aria-hidden="true"></div>
       <img class="film-hero__logo" src="/img/logo-white.png" alt="">
       <button class="film-hero__play" id="play-btn" aria-label="Смотреть мультфильм">
-        <svg viewBox="0 0 40 50"><path d="M4 4.5v41a2 2 0 0 0 3 1.7l31-20.5a2 2 0 0 0 0-3.4L7 2.8a2 2 0 0 0-3 1.7z"/></svg>
+        <svg class="i-play" viewBox="0 0 40 50"><path d="M4 4.5v41a2 2 0 0 0 3 1.7l31-20.5a2 2 0 0 0 0-3.4L7 2.8a2 2 0 0 0-3 1.7z"/></svg>
       </button>
 
       <article class="film-info" id="film-info">
@@ -29,11 +36,43 @@
       </article>
 
       <div class="film-more">
-        <span class="film-more__label">Еще</span>
+        <div class="film-more__head">
+          <span class="film-more__label">Еще</span>
+          <div class="film-more__nav" id="more-nav">
+            <button class="cards__arrow" id="more-prev" type="button" aria-label="Предыдущие мультфильмы">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <button class="cards__arrow" id="more-next" type="button" aria-label="Следующие мультфильмы">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="film-more__row scroller" id="others"></div>
       </div>
 
-      <div class="film-hero__btn"><button class="btn" id="more-btn" aria-expanded="false" aria-controls="film-details">Больше о мультфильме</button></div>
+      <div class="film-hero__btn"><button class="btn btn--flat" id="more-btn" aria-expanded="false" aria-controls="film-details">Больше о мультфильме</button></div>
+
+      <!-- Панель управления плеером -->
+      <div class="player-bar" id="player-bar" hidden>
+        <button class="player-bar__btn" data-act="toggle" aria-label="Пауза">
+          <svg class="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24"><rect x="5.5" y="4" width="4.5" height="16" rx="1.2"/><rect x="14" y="4" width="4.5" height="16" rx="1.2"/></svg>
+        </button>
+        <span class="player-bar__time" id="t-cur">0:00</span>
+        <input class="player-bar__seek" id="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Перемотка">
+        <span class="player-bar__time" id="t-dur">0:00</span>
+        <button class="player-bar__btn" data-act="mute" aria-label="Выключить звук">
+          <svg class="i-vol" viewBox="0 0 24 24"><path d="M4 9h3.5L12 5v14l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="i-muted" viewBox="0 0 24 24"><path d="M4 9h3.5L12 5v14l-4.5-4H4z"/><path d="M16 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <input class="player-bar__vol" id="vol" type="range" min="0" max="1" step="0.05" value="1" aria-label="Громкость">
+        <button class="player-bar__btn" data-act="fullscreen" aria-label="Во весь экран">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+        <button class="player-bar__btn" data-act="close" aria-label="Закрыть плеер">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
     </section>
 
     <section class="film-details" id="film-details" hidden>

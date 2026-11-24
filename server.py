@@ -110,13 +110,62 @@ class Handler(BaseHTTPRequestHandler):
         raw = self.rfile.read(length) if length else b"{}"
         return json.loads(raw.decode("utf-8"))
 
+    def send_video(self, file, mime):
+        """Видео отдаём частями (HTTP Range) — иначе в браузере не работает перемотка."""
+        size = file.stat().st_size
+        start, end, code = 0, size - 1, 200
+        rng = self.headers.get("Range", "")
+        if rng.startswith("bytes=") and "," not in rng:
+            a, _, b = rng[6:].partition("-")
+            try:
+                if a == "" and b != "":
+                    start = max(0, size - int(b))
+                else:
+                    start = int(a or 0)
+                    if b != "":
+                        end = min(int(b), size - 1)
+            except ValueError:
+                start, end = 0, size - 1
+            if start > end or start >= size:
+                self.send_response(416)
+                self.send_header("Content-Range", f"bytes */{size}")
+                self.end_headers()
+                return
+            code = 206
+        self.send_response(code)
+        self.send_header("Content-Type", mime)
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Length", str(end - start + 1))
+        if code == 206:
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+        self.end_headers()
+        if self.command == "HEAD":
+            return
+        try:
+            with open(file, "rb") as f:
+                f.seek(start)
+                left = end - start + 1
+                while left > 0:
+                    chunk = f.read(min(256 * 1024, left))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    left -= len(chunk)
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # браузер сам обрывает запрос при перемотке — это нормально
+
     def send_file(self, file, status=200):
+        mime = mimetypes.guess_type(str(file))[0] or "application/octet-stream"
+        if file.suffix.lower() == ".mp4":
+            mime = "video/mp4"
+        if mime.startswith("video/") and file.is_file():
+            self.send_video(file, mime)
+            return
         try:
             body = file.read_bytes()
         except OSError:
             self.send_error_file()
             return
-        mime = mimetypes.guess_type(str(file))[0] or "application/octet-stream"
         self.send_response(status)
         self.send_header("Content-Type", mime)
         self.send_header("Content-Length", str(len(body)))

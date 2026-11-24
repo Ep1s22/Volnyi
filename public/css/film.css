@@ -42,6 +42,11 @@
 /* «Еще» — лента других мультфильмов, уходит за правый край */
 .film-more { position: absolute; left: calc(906 * var(--u)); right: 0; top: calc(454 * var(--u)); }
 .film-more__label { font-size: max(13px, calc(20 * var(--u))); font-weight: 500; }
+.film-more__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-right: calc(28 * var(--u)); }
+.film-more__nav { display: flex; gap: calc(10 * var(--u)); }
+.film-more__nav[hidden] { display: none; }
+.film-more__nav .cards__arrow { display: grid; place-items: center; width: max(34px, calc(46 * var(--u))); cursor: pointer; }
+.film-more__nav .cards__arrow:disabled { opacity: .4; cursor: default; animation: none; pointer-events: none; }
 .film-more__row { gap: calc(22 * var(--u)); padding: calc(18 * var(--u)) 0 calc(14 * var(--u)) calc(2 * var(--u)); }
 .film-more__row .poster { width: calc(163 * var(--u)); min-width: 96px; aspect-ratio: 163 / 229; border-radius: calc(4 * var(--u)); }
 .film-more__row .poster:hover { transform: translateY(-6px); }
@@ -63,7 +68,10 @@
 .reviews { position: relative; padding: calc(89 * var(--u)) calc(141 * var(--u)) calc(170 * var(--u)); }
 .reviews__blob { position: absolute; pointer-events: none; }
 .reviews__blob--l { left: 0; top: calc(37 * var(--u)); width: calc(438 * var(--u)); }
-.reviews__blob--r { right: 0; bottom: calc(-12 * var(--u)); width: calc(558 * var(--u)); }
+.reviews__blob--r { right: -1%;
+  bottom: calc(-12 * var(--u));
+  width: calc(558 * var(--u));
+  top: 53%; }
 .reviews__title { position: relative; text-align: center; margin: 0 0 calc(56 * var(--u)); font-size: max(20px, calc(26 * var(--u))); font-weight: 700; }
 .reviews__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: calc(34 * var(--u)) calc(64 * var(--u)); }
 .review {
@@ -80,15 +88,94 @@
 .reviews__link { color: var(--blue-m); font-weight: 600; font-size: max(13px, calc(18 * var(--u))); border-bottom: 1.5px dashed currentColor; }
 .reviews__link:hover { color: var(--blue); }
 
-/* Плеер */
-.player .modal__box { width: min(960px, 100%); padding: 0; background: #284D98; overflow: hidden; }
-.player video { width: 100%; display: block; background: #284D98; aspect-ratio: 16 / 9; }
-.player__soon { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; padding: 34px; color: var(--cream); }
-.player__soon img { border-radius: 12px; width: 100%; }
-.player__soon h3 { color: var(--cream); font-size: 28px; }
-.player__soon p { color: #FEFEF5; }
-.player .modal__close { color: var(--cream); z-index: 2; }
-.player .modal__close:hover { background: rgba(254,254,245,.12); }
+/* ---------- Встроенный плеер ----------
+   Состояния первого экрана (класс на .film-hero):
+   is-video   — плеер открыт;  is-playing — идёт воспроизведение;  is-paused — пауза */
+.film-hero__screen {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  background: #142a5c; border-radius: 0 0 calc(30 * var(--u)) calc(30 * var(--u));
+  opacity: 0; visibility: hidden; transition: opacity .6s var(--ease), visibility 0s .6s;
+  cursor: pointer;
+}
+.film-hero__screen video { width: 100%; height: 100%; object-fit: cover; display: block; background: #142a5c; }
+.film-hero__shade {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s var(--ease);
+  background: linear-gradient(180deg, rgba(16,34,74,.2) 0%, rgba(16,34,74,.35) 45%, rgba(16,34,74,.72) 100%);
+}
+.is-video .film-hero__screen { opacity: 1; visibility: visible; transition: opacity .6s var(--ease); }
+.is-paused .film-hero__shade { opacity: 1; }
+.film-hero__screen video { transition: filter .5s var(--ease), transform .6s var(--ease); }
+.is-paused .film-hero__screen video { filter: blur(5px) saturate(.9); transform: scale(1.04); }
+
+/* В режиме плеера всё поднимаем так, чтобы первый экран вместе с панелью
+   помещался в окно браузера (на экранах 16:9 это ≈ 800 «пикселей макета») */
+.is-video .film-info { top: calc(372 * var(--u)); }
+.is-video .film-more { top: calc(379 * var(--u)); }
+.is-video .film-hero__play { top: calc(220 * var(--u)); }
+.film-more__label { text-shadow: 0 1px 6px rgba(16,34,74,.5); }
+
+/* Всё, что лежит поверх видео */
+.film-hero__bubbles, .film-hero__logo, .film-hero__play, .film-info, .film-more, .film-hero__btn { z-index: 2; }
+.film-hero__logo, .film-info, .film-more, .film-hero__btn {
+  transition: opacity .45s var(--ease), transform .45s var(--ease), top .5s var(--ease), visibility 0s;
+}
+.is-video .film-hero__logo, .is-video .film-hero__btn { opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s .35s; }
+/* Во время просмотра описание и «Еще» уходят, на паузе — возвращаются */
+.is-playing .film-info, .is-playing .film-more {
+  opacity: 0; visibility: hidden; transform: translateY(calc(24 * var(--u)));
+  transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s .35s;
+}
+.is-paused .film-info { box-shadow: 0 24px 50px -20px rgba(10,20,50,.7); }
+
+/* Большая кнопка: исчезает при воспроизведении, на паузе — «продолжить» */
+.film-hero__play { transition: transform .32s var(--ease), box-shadow .32s var(--ease), opacity .3s var(--ease), visibility 0s; }
+.is-playing .film-hero__play { opacity: 0; visibility: hidden; transform: scale(.7); transition: opacity .3s var(--ease), transform .3s var(--ease), visibility 0s .3s; }
+
+/* Пузырьки по бокам: при старте немного всплывают и растворяются */
+.film-hero__bubbles .bubble { transition: translate 1.6s var(--ease), opacity 1.6s var(--ease); }
+.is-video .film-hero__bubbles .bubble { translate: 0 calc(-60 * var(--u)); opacity: 0; }
+
+/* Пузырьки, которые вылетают из кнопки Play */
+.film-hero__burst { position: absolute; inset: 0; pointer-events: none; z-index: 3; color: #FEFEF5; overflow: hidden; }
+.film-hero__burst .bubble { animation: none; }
+
+/* Панель управления */
+.player-bar {
+  position: absolute; z-index: 4; left: calc(71 * var(--u)); right: calc(71 * var(--u)); bottom: calc(84 * var(--u));
+  display: flex; align-items: center; gap: max(8px, calc(16 * var(--u)));
+  padding: max(6px, calc(10 * var(--u))) max(12px, calc(22 * var(--u)));
+  border-radius: calc(16 * var(--u)); color: #FEFEF5;
+  background: rgba(16, 34, 74, .55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+.player-bar[hidden] { display: none; }
+.film-hero.is-idle .player-bar { opacity: 0; transform: translateY(10px); pointer-events: none; }
+.film-hero.is-idle .film-hero__screen { cursor: none; }
+.player-bar__btn { flex: none; width: max(34px, calc(44 * var(--u))); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; color: #FEFEF5; transition: background .2s; }
+.player-bar__btn:hover { background: rgba(254,254,245,.16); }
+.player-bar__btn:focus-visible { outline: 2px solid #FEFEF5; outline-offset: 2px; }
+.player-bar__btn svg { width: 58%; fill: currentColor; }
+.player-bar__btn .i-pause, .is-playing .player-bar__btn .i-play { display: none; }
+.is-playing .player-bar__btn .i-pause { display: block; }
+.player-bar__btn .i-muted, .is-muted .player-bar__btn .i-vol { display: none; }
+.is-muted .player-bar__btn .i-muted { display: block; }
+.player-bar__time { flex: none; font-size: max(12px, calc(16 * var(--u))); font-weight: 600; font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: center; }
+.player-bar input[type=range] {
+  -webkit-appearance: none; appearance: none; height: 6px; border-radius: 9px; cursor: pointer; margin: 0;
+  background: linear-gradient(90deg, #FEFEF5 var(--p, 0%), rgba(254,254,245,.28) var(--p, 0%));
+}
+.player-bar__seek { flex: 1; min-width: 60px; }
+.player-bar__vol { flex: none; width: max(60px, calc(100 * var(--u))); }
+.player-bar input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #FEFEF5; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+.player-bar input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: #FEFEF5; }
+.player-bar input[type=range]:focus-visible { outline: 2px solid #FEFEF5; outline-offset: 4px; }
+
+/* Во весь экран разворачивается весь первый экран — так на паузе видны и описание, и «Еще» */
+.film-hero:fullscreen { height: 100vh; min-height: 0; background: #142a5c; }
+.film-hero:fullscreen .film-hero__screen { border-radius: 0; }
+.film-hero:fullscreen .film-hero__screen video { object-fit: contain; }
+.film-hero:fullscreen .player-bar { bottom: calc(28 * var(--u)); }
+.film-hero:fullscreen .film-info, .film-hero:fullscreen .film-more { top: auto; bottom: calc(130 * var(--u)); }
 
 @media (max-width: 760px) {
   .film-hero { height: auto; padding: 30px 20px 30px; display: flex; flex-direction: column; gap: 20px; }
@@ -102,6 +189,27 @@
   .film-details__poster { width: 50%; }
   .reviews { padding: 50px 20px 90px; }
   .reviews__grid { grid-template-columns: 1fr; gap: 16px; }
-  .player__soon { grid-template-columns: 1fr; }
-  .player__soon img { width: 50%; }
+  /* плеер на телефоне: экран 16:9 сверху, панель под ним */
+  .film-hero.is-video { padding-top: 0; }
+  .film-hero__screen { position: relative; inset: auto; order: -2; display: none; margin: 0 -20px; aspect-ratio: 16 / 9; border-radius: 0 0 18px 18px; }
+  .is-video .film-hero__screen { display: block; }
+  .film-hero__screen video { object-fit: contain; }
+  .is-video .film-hero__logo, .is-video .film-hero__btn, .is-video .film-hero__bubbles { display: none; }
+  .is-playing .film-info, .is-playing .film-more { display: none; }
+  .is-video .film-info, .is-video .film-more { top: auto; }
+  .is-video .film-hero__play { top: calc((100vw * 9 / 16) / 2); transform: translate(-50%, -50%); }
+  .is-video .film-hero__play:hover { transform: translate(-50%, -50%) scale(1.1); }
+  .player-bar { position: relative; inset: auto; order: -1; margin: -8px 0 0; border-radius: 14px; flex-wrap: wrap; row-gap: 4px; }
+  .player-bar__seek { order: 5; flex-basis: 100%; }
+  .player-bar__vol { display: none; }
+  .film-hero.is-idle .player-bar { opacity: 1; transform: none; pointer-events: auto; }
+}
+/* стеклянная кнопка Play — в общем стиле круглых стеклянных кнопок (style.css) */
+.film-hero__play svg { fill: var(--cream); filter: drop-shadow(0 1px 2px rgba(20,40,90,.35)); }
+.film-hero__play {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,.8) 0 7%, rgba(255,255,255,.22) 28%, rgba(255,255,255,0) 56%),
+    rgba(83, 112, 171, .55);
+  border: 1px solid rgba(255, 255, 255, .65);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,.55), inset 0 -5px 12px rgba(20, 40, 90, .3), 0 10px 22px -10px rgba(20, 40, 90, .55);
 }

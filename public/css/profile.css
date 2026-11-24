@@ -1,45 +1,51 @@
 /* ============================ Профиль ============================ */
 .profile { position: relative; color: #FEFEF5; padding-bottom: calc(110 * var(--u)); }
 
-/* Шапка профиля (макет: y 97–860) */
+/* Шапка профиля: аватар, имя, @имя, «Редактировать» и уровень.
+   --pu — «пиксель макета», дополнительно ограниченный высотой окна:
+   весь блок (≈ 760 единиц) всегда помещается в один экран под шапкой сайта. */
 .profile-hero {
+  --head: max(56px, calc(97 * var(--u)));
+  --pu: min(var(--u), calc((100vh - var(--head)) / 760));
+  --pu: min(var(--u), calc((100svh - var(--head)) / 760));
   position: relative; text-align: center; color: var(--blue);
-  padding-top: calc(150 * var(--u));
-  padding-bottom: calc(170 * var(--u));
+  min-height: calc(100vh - var(--head));
+  min-height: calc(100svh - var(--head));
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: calc(56 * var(--pu)) 0 calc(36 * var(--pu));
   background: linear-gradient(180deg,
     #284D98 0%,
-    #284D98 16%,
-    rgba(83,112,171,.92) 31%,
-    rgba(180,191,216,.72) 51%,
-    rgba(254,254,245,.95) 78%,
-    #FEFEF5 92%,
+    #284D98 14%,
+    rgba(83,112,171,.92) 30%,
+    rgba(180,191,216,.72) 50%,
+    rgba(254,254,245,.95) 72%,
+    #FEFEF5 86%,
     var(--cream) 100%);
 }
+.profile-hero__stage { position: relative; width: calc(280 * var(--pu)); min-width: 140px; aspect-ratio: 1; flex: none; }
 .profile-hero__avatar {
-  position: relative; z-index: 2; width: calc(373 * var(--u)); min-width: 180px; aspect-ratio: 1; margin: 0 auto;
+  position: relative; z-index: 2; width: 100%; height: 100%;
   border-radius: 50%; overflow: hidden; background: var(--cream);
   animation: pop .8s var(--ease) both;
 }
 .profile-hero__avatar img { width: 100%; height: 100%; object-fit: cover; }
 @keyframes pop { from { transform: scale(.85); opacity: 0; } }
-.profile-hero__orbit { position: absolute; left: 50%; top: calc(336.5 * var(--u)); z-index: 1; width: 0; height: 0; pointer-events: none; }
+/* «Орбита» — точка в центре аватара, вокруг неё крутятся духи */
+.profile-hero__orbit { position: absolute; left: 50%; top: 50%; z-index: 1; width: 0; height: 0; pointer-events: none; }
 .profile-hero__ghost { position: absolute; z-index: 1; max-width: none; filter: drop-shadow(0 1px 2px rgba(40, 77, 152, .6)); pointer-events: none; animation: drift 7s ease-in-out infinite; }
-.profile-hero__ghost--1 { left: calc(102 * var(--u)); top: calc(-241.5 * var(--u)); width: calc(218 * var(--u)); }
-.profile-hero__ghost--2 { left: calc(-333 * var(--u)); top: calc(37.5 * var(--u)); width: calc(216 * var(--u)); animation-delay: -3s; }
-.profile-hero__orbit--1,
-.profile-hero__orbit--2 { animation: none; }
-@keyframes avatar-orbit { to { rotate: 1turn; } }
+.profile-hero__ghost--1 { left: calc(77 * var(--pu)); top: calc(-181 * var(--pu)); width: calc(164 * var(--pu)); }
+.profile-hero__ghost--2 { left: calc(-250 * var(--pu)); top: calc(28 * var(--pu)); width: calc(162 * var(--pu)); animation-delay: -3s; }
 @keyframes drift { 50% { transform: translate(6px, -10px) rotate(2deg); } }
-.profile-hero__name { position: relative; z-index: 3; margin: calc(23 * var(--u)) 0 0; font-size: max(32px, calc(64 * var(--u))); font-weight: 500; line-height: 1.1; }
-.profile-hero__nick { position: relative; z-index: 3; margin: calc(4 * var(--u)) 0 0; font-size: max(18px, calc(36 * var(--u))); font-weight: 500; color: var(--blue); }
-.profile-hero__actions { position: relative; z-index: 3; margin-top: calc(40 * var(--u)); display: flex; justify-content: center; }
-.profile-hero__actions .btn { width: calc(344 * var(--u)); min-width: 180px; }
+.profile-hero__name { position: relative; z-index: 3; margin: calc(18 * var(--pu)) 0 0; font-size: max(26px, calc(54 * var(--pu))); font-weight: 500; line-height: 1.1; }
+.profile-hero__nick { position: relative; z-index: 3; margin: calc(2 * var(--pu)) 0 0; font-size: max(16px, calc(30 * var(--pu))); font-weight: 500; color: var(--blue); }
+.profile-hero__actions { position: relative; z-index: 3; margin-top: calc(26 * var(--pu)); display: flex; justify-content: center; }
+.profile-hero__actions .btn { width: calc(300 * var(--pu)); min-width: 170px; height: max(36px, calc(54 * var(--pu))); font-size: max(14px, calc(24 * var(--pu))); }
 
 /* Уровень */
-.level { padding: calc(55 * var(--u)) calc(157 * var(--u)) 0; color: var(--blue); }
-.level__row { display: flex; justify-content: space-between; padding: 0 calc(8 * var(--u)) 0 calc(3 * var(--u)); font-size: max(15px, calc(24 * var(--u))); font-weight: 500; }
+.level { align-self: stretch; text-align: left; margin-top: calc(40 * var(--pu)); padding: 0 calc(157 * var(--u)); color: var(--blue); }
+.level__row { display: flex; justify-content: space-between; padding: 0 calc(8 * var(--u)) 0 calc(3 * var(--u)); font-size: max(15px, calc(22 * var(--pu))); font-weight: 500; }
 .level__row span:last-child { color: var(--blue-m); }
-.level__bar { height: calc(8 * var(--u)); min-height: 5px; margin-top: calc(22 * var(--u)); background: var(--grey); border-radius: 9px; overflow: hidden; }
+.level__bar { height: calc(8 * var(--u)); min-height: 5px; margin-top: calc(16 * var(--pu)); background: var(--grey); border-radius: 9px; overflow: hidden; }
 .level__bar i { display: block; height: 100%; width: 0; background: var(--blue-m); border-radius: 9px; transition: width 1.4s var(--ease); }
 .level__hint { margin: 10px 0 0; font-size: 12px; color: rgba(40,77,152,.45); text-align: right; }
 
@@ -47,7 +53,7 @@
 .section-title small { font-size: .6em; color: var(--blue-m); margin-left: 6px; }
 
 /* Полученные карточки */
-.cards { margin-top: calc(40 * var(--u)); }
+.cards { margin-top: calc(30 * var(--u)); }
 .cards__wrap { position: relative; display: flex; align-items: center; gap: calc(28 * var(--u)); padding: 0 calc(150 * var(--u)); margin-top: calc(48 * var(--u)); }
 .cards__row { flex: 1; gap: calc(105 * var(--u)); padding: calc(12 * var(--u)) calc(40 * var(--u)); }
 .cards__empty { width: 100%; margin: 0; text-align: center; color: var(--blue-m); font-size: max(14px, calc(20 * var(--u))); }
@@ -90,11 +96,12 @@
 .card-modal img { width: min(300px, 70%); margin: 0 auto 16px; border-radius: 16px; box-shadow: 0 20px 40px -20px rgba(40,77,152,.6); }
 
 @media (max-width: 760px) {
-  .profile-hero { padding-top: 50px; }
-  .profile-hero__orbit { top: 140px; }
-  .profile-hero__ghost--1 { left: calc(44vw - 90px); top: -120px; width: 90px; }
-  .profile-hero__ghost--2 { left: -44vw; top: 50px; width: 90px; }
-  .level, .viewed { padding: 30px 20px 0; }
+  .profile-hero { min-height: 0; padding: 70px 0 30px; }
+  .profile-hero__stage { width: 150px; }
+  .profile-hero__ghost--1 { left: 42px; top: -102px; width: 86px; }
+  .profile-hero__ghost--2 { left: -132px; top: 14px; width: 86px; }
+  .level { padding: 0 20px; margin-top: 26px; }
+  .viewed { padding: 30px 20px 0; }
   .cards__wrap { padding: 0 6px; gap: 4px; }
   .cards__row { gap: 16px; padding: 12px 6px; }
   .viewed__grid { grid-template-columns: 1fr; gap: 16px; }

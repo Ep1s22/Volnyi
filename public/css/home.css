@@ -1,50 +1,65 @@
 /* ============================ Главная ============================ */
 
 /* ---------- Первый экран (макет: y 97–1000, высота 903) ---------- */
-.hero { position: relative; aspect-ratio: 1596 / 903; z-index: 2; }
-.hero__phone { position: absolute; left: 56.2%; top: 9.75%; width: 20.2%; z-index: 1; transition: transform .5s var(--ease); }
+.hero {
+  /* блок уменьшен на 15%: «пиксель макета» внутри hero стал 0.85 от обычного, высота блока — тоже */
+  --hero-k: .85;
+  --u: calc(min(1px, 100vw / 1596) * var(--hero-k));
+  position: relative; aspect-ratio: 1596 / 768; z-index: 2;
+}
+.hero__phone { position: absolute; left: 58%; top: 12%; width: calc(20.2% * var(--hero-k)); z-index: 1; transition: transform .5s var(--ease); }
 .hero__phone:hover { transform: rotate(-2deg) translateY(-8px); }
-.hero__deco { position: absolute; left: -1.9%; top: 0; min-width: 104%; height: 104.43%; z-index: 2; pointer-events: none; }
+/* Картинка с волнами расширена вправо (1920 → 2120 px): большая волна сдвинута правее,
+   левая часть волн и облака остались на месте, лишнее справа обрезается краем страницы */
+.hero__deco { position: absolute; left: -1.9%; top: 0; width: calc(104% * 2120 / 1920); max-width: none; height: 104.43%; z-index: 2; pointer-events: none; }
 .hero__wave-text { position: absolute;
-    left: 71%;
+    left: 81.8%;   /* вместе с волной — правее */
     top: 67.9%;
     width: 16.571%;
     z-index: 3;
     animation: spin-in 1.2s var(--ease) both .3s; }
 @keyframes spin-in { from { opacity: 0; transform: rotate(-25deg) scale(.9); } }
-.hero__content { position: absolute; left: 5.58%; top: 9.75%; width: 46%; z-index: 4; }
+.hero__content { position: absolute; left: 5%; top: 9.75%; width: calc(900 * var(--u)); z-index: 4; }
 .hero__logo { margin: 0; animation: rise 1s var(--ease) both; }
-.hero__logo img { width: 100%; }
+.hero__logo img { width: calc(734 * var(--u)); }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
 .hero__tagline {
   margin: calc(19 * var(--u)) 0 0 calc(7 * var(--u));
   font-size: max(14px, calc(29 * var(--u))); font-weight: 500; line-height: 1.22;
-  color: var(--blue-d); max-width: calc(640 * var(--u));
+  color: var(--blue-d); max-width: calc(840 * var(--u));
   animation: rise 1s var(--ease) both .15s;
 }
-.hero__btn { margin: calc(36 * var(--u)) 0 0 calc(7 * var(--u)); height: max(36px, calc(58 * var(--u))); font-size: max(14px, calc(29 * var(--u))); padding: 0 calc(22 * var(--u)); border-radius: calc(12 * var(--u)); animation: rise 1s var(--ease) both .3s; }
+.hero__btn { margin: calc(36 * var(--u)) 0 0 calc(7 * var(--u)); height: max(34px, calc(58 * var(--u))); font-size: max(13px, calc(29 * var(--u))); padding: 0 calc(24 * var(--u)); border-radius: calc(12 * var(--u)); animation: rise 1s var(--ease) both .3s; }
+/* на макете кнопка плоская: сплошная заливка, без стекла, блика и тени */
+.hero__btn, .hero__btn:hover {
+  background: var(--blue-d); border: 0; text-shadow: none; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.hero__btn:hover { background: #193f80; }
+.hero__btn::after { display: none; }
 
 /* ---------- Синий блок ---------- */
-.ocean { background: var(--blue); position: relative; color: var(--cream); margin-top: -1px; overflow: hidden; }
+.ocean { background: linear-gradient(var(--blue), var(--blue)) 0 0 / 100% calc(100% - 123 * var(--u) + 3px) no-repeat; position: relative; z-index: 1; color: var(--cream); margin-top: -1px; overflow: hidden; }
 .ocean__bottom { width: 100%; display: block; margin-top: calc(37 * var(--u)); margin-bottom: calc(-57 * var(--u)); position: relative; z-index: 2; }
 
 /* Ценности (y 1092–1557) */
 .values { position: relative; padding-top: calc(92 * var(--u)); height: calc(557 * var(--u)); }
 .values__bg { position: absolute; width: calc(735 * var(--u)); left: calc(432 * var(--u)); top: calc(256 * var(--u)); opacity: .12; pointer-events: none; }
-.values__track { position: absolute; left: calc(142 * var(--u)); top: calc(92 * var(--u)); width: calc(20 * var(--u)); height: calc(465 * var(--u)); background: var(--blue-m); border-radius: 99px; }
-.values__thumb { position: absolute; left: calc(-6 * var(--u)); width: calc(32 * var(--u)); height: 47.5%; top: 9.5%; background: var(--cream); border-radius: 99px; transition: top .1s linear; }
+/* Ползунок тоньше (20 → 10), длина та же — 465 */
+.values__track { position: absolute; left: calc(147 * var(--u)); top: calc(92 * var(--u)); width: max(5px, calc(10 * var(--u))); height: calc(465 * var(--u)); background: var(--blue-m); border-radius: 99px; }
+.values__thumb { position: absolute; left: 50%; translate: -50% 0; width: max(9px, calc(18 * var(--u))); height: 47.5%; top: 9.5%; background: var(--cream); border-radius: 99px; transition: top .1s linear; }
 .values__list {
-  position: relative; margin-left: calc(303 * var(--u)); width: calc(1132 * var(--u));
+  position: relative; margin-left: calc(222 * var(--u)); width: calc(1232 * var(--u));   /* блок шире: до правого поля, симметрично ползунку */
   height: calc(459 * var(--u)); overflow-y: auto; scrollbar-width: none;
   scroll-snap-type: y mandatory; outline: none;
   display: flex; flex-direction: column; gap: calc(50.15 * var(--u));
 }
 .values__list::-webkit-scrollbar { display: none; }
 .values__item {
-  width: 85%; margin: 0; flex: none; scroll-snap-align: start;
+  width: 100%; margin: 0; flex: none; scroll-snap-align: start;
   min-height: calc(170 * var(--u));
   display: flex; align-items: center;
-  padding: calc(25.5 * var(--u)) calc(85 * var(--u));
+  padding: calc(25.5 * var(--u)) calc(64 * var(--u));
   background: rgba(254, 254, 245, .2); border-radius: calc(8.5 * var(--u));
   font-size: max(12px, calc(22.1 * var(--u))); font-weight: 500; line-height: 1.23;
   backdrop-filter: blur(2px);
@@ -96,10 +111,17 @@
 .fund {
   position: relative; text-align: center;
   padding: calc(115 * var(--u)) 0 calc(66 * var(--u));
-  background: var(--cream) url(../img/pattern.jpg) no-repeat;
-  background-size: calc(3104.35 * var(--u)) auto;
-  background-position: calc(-1085.22 * var(--u)) calc(-409.13 * var(--u));
+  background: var(--cream);
 }
+/* Паттерн «ВОЛНУЙ» масштабируется по ширине секции и заходит под соседние волны */
+.fund::before {
+  content: ''; position: absolute; z-index: 0; pointer-events: none;
+  left: 0; right: 0; top: calc(-110 * var(--u)); bottom: calc(-110 * var(--u));
+  background: url(../img/pattern.jpg) no-repeat;
+  background-size: 100% auto;
+  background-position: calc(-30 * var(--u)) calc(-120 * var(--u));
+}
+.fund > * { position: relative; z-index: 1; }
 .fund__title { margin: 0; font-size: max(22px, calc(48 * var(--u))); font-weight: 700; }
 .fund__shell-wrap { position: relative; width: calc(477 * var(--u)); min-width: 200px; aspect-ratio: 510 / 460; margin: calc(30 * var(--u)) auto 0; }
 .fund__shell { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: none; }
@@ -112,7 +134,7 @@
 .qr-modal img { width: min(420px, 100%); max-height: 70vh; margin: 0 auto; border: 0; border-radius: 18px; object-fit: contain; }
 
 @media (min-width: 761px) {
-  .ocean { position: relative; z-index: auto; }
+  .ocean { position: relative; z-index: 1; }
   .fund { z-index: auto; margin-top: 0; margin-bottom: 0; }
   .footer { position: relative; z-index: auto; }
 }
@@ -125,9 +147,10 @@
   .hero__deco { top: auto;
     bottom: -6%;
     height: auto;
-    min-width: 102%;
+    width: calc(102% * 2120 / 1920);
     left: -1.9%;
     transform: translateY(-20px); }
+  .hero__logo img { width: 100%; }
   .hero__tagline { max-width: none; }
   .hero__btn { padding: 0 22px; }
   .hero__wave-text { display: none; }
@@ -144,5 +167,52 @@
   .catalog { margin-top: 40px; }
   .catalog__row { padding: 24px 20px 10px; gap: 16px; }
   .catalog__row.is-ring { height: 270px; margin-top: 24px; padding: 0; }
-  .fund { padding-top: 60px; background-size: 180% auto; background-position: 50% 42%; }
+  /* на телефоне в фоне ровно 3 строки «ВОЛНУЙ»: в картинке 14 строк, поэтому высота фона = 14/3 высоты блока */
+  .fund { padding-top: 60px; }
+  .fund::before { top: -48px; bottom: -48px; background-size: auto 380%; background-position: 0 6%; }
 }
+
+/* ---------- Облака-векторы на первом экране (Vector1 — слева, Vector2 — справа сверху) ---------- */
+.hero__cloud { position: absolute; z-index: 5; max-width: none; pointer-events: none; }
+.hero__cloud--1 { left: -1.9%; top: 65%; width: calc(104% * 539 / 1920); }
+.hero__cloud--2 { right: -2%; top: 3.5%; width: calc(104% * 786 / 1920); }
+.hero__content { z-index: 4; }
+
+@media (max-width: 760px) {
+  .hero__cloud--1 { left: -6%; top: auto; bottom: 22%; width: 62%; }
+  .hero__cloud--2 { right: -12%; top: 2%; width: 78%; opacity: .9; }
+}
+
+/* ---------- Основной блок волн (hero-deco 1920×435) — по низу первого экрана, во всю ширину ---------- */
+/* нижние 29 px картинки — капли, сплошная полоса заканчивается выше: прячем их в синий блок */
+.hero__deco { left: 0; top: auto; bottom: 0; width: 100%; height: auto; transform-origin: 0 100%; transform: translateY(10%) scale(var(--wave-k, 1.1)); }
+/* надпись «Волна твоей эпохи» теперь входит в сам основной блок */
+.hero__wave-text { display: none; }
+@media (max-width: 760px) {
+  /* на телефоне волна крупнее: картинка в 1,5 раза шире экрана, прижата вправо, левый край обрезается */
+  .hero { min-height: 560px; }
+  .hero__deco { left: auto; right: 0; bottom: 0; width: 150%; transform-origin: 100% 100%; transform: translateY(9%); }
+}
+
+
+/* ---------- Кнопки каталога и кассового сбора: как на макете — плоские, #5370ab, кремовый текст ---------- */
+.catalog__btn .btn, .fund__btn {
+  border: 0; text-shadow: none; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  border-radius: calc(12 * var(--u)); font-weight: 500;
+  transition: background .25s var(--ease), transform .25s var(--ease);
+}
+.catalog__btn .btn::after, .fund__btn::after { display: none; }
+.catalog__btn .btn, .catalog__btn .btn:hover, .fund__btn, .fund__btn:hover { background: #5370ab; color: var(--cream); }
+.catalog__btn .btn:hover, .fund__btn:hover { background: #6483c0; transform: translateY(-2px); }
+.catalog__btn .btn:focus-visible, .fund__btn:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; box-shadow: none; }
+.fund__btn:focus-visible { outline-color: var(--blue-d); }
+
+/* ---------- Карточка новостей слегка покачивается — как будто висит на гвоздике (отверстие слева сверху) ---------- */
+.news__card { --tilt: 10.4deg; transform-origin: calc(36 * var(--u)) calc(32 * var(--u)); animation: news-sway 7s ease-in-out infinite; }
+@keyframes news-sway {
+  0%, 100% { transform: rotate(calc(var(--tilt) - 1deg)); }
+  50%      { transform: rotate(calc(var(--tilt) + 1deg)); }
+}
+@media (max-width: 760px) { .news__card { --tilt: 3deg; transform-origin: 24px 24px; } }
+@media (prefers-reduced-motion: reduce) { .news__card { animation: none; } }

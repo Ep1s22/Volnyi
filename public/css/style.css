@@ -96,7 +96,6 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 @media (min-width: 761px) {
   .header { padding-left: calc(44 * var(--u)); padding-right: calc(44 * var(--u)); }
   .header__right { gap: calc(28 * var(--u)); }
-  .header__right .burger { display: none; }
   .header__desktop-info { display: flex; }
   .header__desktop-nav {
     display: flex; align-items: center; gap: calc(38 * var(--u));
@@ -121,8 +120,6 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
   .header__socials img { height: max(18px, calc(25 * var(--u))); width: auto; }
   .header__phone { color: var(--cream); font-size: max(12px, calc(16 * var(--u))); white-space: nowrap; }
   .header__phone:hover { text-decoration: underline; text-underline-offset: 4px; }
-  .menu-overlay,
-  .menu { display: none; }
 }
 
 /* ---------- Выезжающее меню ---------- */
@@ -130,7 +127,13 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .menu {
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 100;
   width: min(302px, 85vw);
-  background: linear-gradient(to bottom, var(--menu) 0%, rgba(190, 201, 223, .92) 55%, rgba(190, 201, 223, .7) 100%);
+  /* стекло: матовая панель, страница под ней размыта и не читается */
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,.08) 38%, rgba(255,255,255,.18) 100%),
+    rgba(40, 77, 152, .72);
+  -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
+  border-left: 1px solid rgba(255, 255, 255, .55);
+  box-shadow: inset 1px 0 0 rgba(255,255,255,.6), -18px 0 40px -18px rgba(20, 40, 90, .55);
   transform: translateX(100%); transition: transform .4s var(--ease);
   display: flex; flex-direction: column;
   color: var(--cream);
@@ -150,11 +153,6 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .socials a:hover { transform: translateY(-3px) scale(1.08); }
 .socials img { height: 30px; width: auto; }
 
-@media (min-width: 761px) {
-  .header__right .burger,
-  .menu-overlay,
-  .menu { display: none !important; }
-}
 
 /* ---------- Подвал ---------- */
 .footer { position: relative; color: var(--cream); margin-top: auto; }
@@ -264,7 +262,9 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .reveal.is-in { opacity: 1; transform: none; }
 
 /* Пузырьки (декор) */
-.bubble { position: absolute; border-radius: 50%; border: 2px solid currentColor; opacity: .9; pointer-events: none; animation: float 6s ease-in-out infinite; }
+.bubble { position: absolute; border-radius: 50%; border: 2px solid currentColor; opacity: .9; pointer-events: none; }
+/* «парят» пузырьки только на страницах профиля и ивентов (класс ставит common.js) */
+.has-bubbles .bubble { animation: float 6s ease-in-out infinite; }
 .bubble::after { content: ''; position: absolute; width: 28%; height: 28%; left: 22%; top: 20%; border-radius: 50%; background: currentColor; opacity: .7; }
 @keyframes float { 50% { transform: translateY(-10px); } }
 
@@ -358,3 +358,109 @@ a, button { -webkit-tap-highlight-color: transparent; }
 }
 .page { max-width: var(--frame); }
 body { background: var(--cream); }
+/* =====================================================================
+   Стеклянные кнопки, круглые стеклянные кнопки, пузырьки по краям
+   ===================================================================== */
+
+/* ---------- Кнопки «из стекла» (все .btn и кнопки входа/регистрации) ---------- */
+.btn, .auth__submit, .auth-modal .auth__submit {
+  --glass: rgba(83, 112, 171, .62);
+  position: relative; overflow: hidden; isolation: isolate;
+  color: var(--cream);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.12) 46%, rgba(255,255,255,0) 54%, rgba(255,255,255,.14) 100%),
+    var(--glass);
+  border: 1px solid rgba(255, 255, 255, .55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.75),
+    inset 0 -3px 8px rgba(20, 40, 90, .22),
+    0 10px 24px -12px rgba(20, 40, 90, .5);
+  -webkit-backdrop-filter: blur(12px) saturate(170%);
+  backdrop-filter: blur(12px) saturate(170%);
+  text-shadow: 0 1px 2px rgba(20, 40, 90, .35);
+}
+.btn--dark { --glass: rgba(31, 78, 152, .74); }
+.auth__submit { --glass: rgba(40, 77, 152, .7); }
+/* блик, который пробегает по стеклу при наведении */
+.btn::after, .auth__submit::after {
+  content: ''; position: absolute; z-index: -1; top: -20%; bottom: -20%; left: -70%; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-20deg); transition: left .75s var(--ease); pointer-events: none;
+}
+.btn:hover, .btn--dark:hover, .auth__submit:hover, .auth-modal .auth__submit:hover {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.16) 46%, rgba(255,255,255,0) 54%, rgba(255,255,255,.16) 100%),
+    var(--glass);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -3px 8px rgba(20, 40, 90, .22),
+    0 16px 30px -14px rgba(20, 40, 90, .6);
+}
+.btn:hover::after, .auth__submit:hover::after { left: 130%; }
+.btn:focus-visible { box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 0 0 4px rgba(254, 254, 245, .9); }
+
+/* ---------- Плоская кнопка (как на макете): сплошная заливка #5370ab, кремовый текст, без стекла и тени ---------- */
+.btn--flat, .btn--flat:hover {
+  background: #5370ab; color: var(--cream); border: 0; text-shadow: none; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  border-radius: calc(12 * var(--u)); font-weight: 500;
+}
+.btn--flat::after { display: none; }
+.btn--flat:hover { background: #6483c0; transform: translateY(-2px); }
+.btn--flat:active { transform: translateY(0); }
+.btn--flat:disabled, .btn--flat:disabled:hover { background: #5370ab; opacity: .55; transform: none; }
+.btn--flat:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; box-shadow: none; }
+
+/* ---------- Круглые стеклянные кнопки (как «наверх»): все одинаковые и «дышат» по кругу ---------- */
+.to-top, .cards__arrow, .film-hero__play {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,.8) 0 7%, rgba(255,255,255,.22) 28%, rgba(255,255,255,0) 56%),
+    rgba(83, 112, 171, .55);
+  border: 1px solid rgba(255, 255, 255, .65);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.55),
+    inset 0 -5px 12px rgba(20, 40, 90, .3),
+    0 10px 22px -10px rgba(20, 40, 90, .55);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
+  backdrop-filter: blur(8px) saturate(160%);
+}
+.to-top:hover, .cards__arrow:hover {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,.9) 0 7%, rgba(255,255,255,.28) 28%, rgba(255,255,255,0) 56%),
+    rgba(40, 77, 152, .7);
+}
+.to-top, .cards__arrow { animation: glass-bob 3.6s ease-in-out infinite; }
+.cards__arrow:last-child { animation-delay: -1.8s; }
+@keyframes glass-bob { 50% { translate: 0 -4px; } }
+.cards__arrow { width: max(40px, calc(57 * var(--u))); height: auto; aspect-ratio: 1; }
+.cards__arrow svg { width: 50%; stroke: var(--cream); }
+
+/* ---------- Пузырьки по краям экрана (создаются в common.js) ---------- */
+.edge-bubbles { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; }
+.edge-bubble {
+  position: absolute; bottom: -60px; width: var(--s); height: var(--s); border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255,255,255,.95) 0 12%, rgba(255,255,255,.25) 32%, rgba(255,255,255,0) 60%),
+    rgba(109, 134, 182, .18);
+  border: 1.5px solid rgba(83, 112, 171, .6);
+  box-shadow: inset 0 0 6px rgba(255,255,255,.6), 0 0 0 1px rgba(255,255,255,.35);
+  opacity: 0;
+  animation: edge-rise var(--d) linear var(--delay) infinite, edge-sway calc(var(--d) / 4) ease-in-out var(--delay) infinite alternate;
+}
+.edge-bubble.is-left { left: var(--x); }
+.edge-bubble.is-right { right: var(--x); }
+@keyframes edge-rise {
+  0%   { transform: translateY(0) scale(.55); opacity: 0; }
+  8%   { opacity: .9; }
+  85%  { opacity: .8; }
+  100% { transform: translateY(calc(-100vh - 120px)) scale(1); opacity: 0; }
+}
+@keyframes edge-sway { to { translate: var(--sway) 0; } }
+.menu-open .edge-bubbles { z-index: 80; }
+
+/* ---------- Бургер-меню и на компьютере ---------- */
+@media (min-width: 761px) {
+  .header__right .burger { display: block; }
+  .menu__nav a { font-size: 22px; }
+}

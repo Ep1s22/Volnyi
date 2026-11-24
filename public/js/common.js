@@ -204,9 +204,8 @@ function openAuthModal(mode = 'login', redirectTo = null) {
 
 /* ------------------------------------------------ Шапка, меню, подвал */
 const SOCIALS = `
-  <a href="https://vk.com" target="_blank" rel="noopener" aria-label="ВКонтакте"><img src="/img/ic-vk.svg" alt=""></a>
-  <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><img src="/img/ic-inst.svg" alt=""></a>
-  <a href="https://t.me" target="_blank" rel="noopener" aria-label="Telegram"><img src="/img/ic-tg.svg" alt=""></a>`;
+  <a href="https://vk.ru/qwarghosskskst" target="_blank" rel="noopener" aria-label="ВКонтакте"><img src="/img/ic-vk.svg" alt=""></a>
+  <a href="https://t.me/balkwhuqos" target="_blank" rel="noopener" aria-label="Telegram"><img src="/img/ic-tg.svg" alt=""></a>`;
 
 function renderChrome() {
   const here = location.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/';
@@ -217,14 +216,10 @@ function renderChrome() {
     <header class="header">
       <a class="header__logo" href="/" aria-label="На главную"><img src="/img/logo-icon.svg" alt="Волнуй"></a>
       <nav class="header__desktop-nav" aria-label="Основная навигация">
-        ${nav.filter(([href]) => href !== '/login').map(([href, label]) => `
+        ${nav.filter(([href]) => href === '/film' || href === '/events').map(([href, label]) => `
           <a href="${href}" class="${here === href ? 'is-active' : ''}">${label}</a>`).join('')}
       </nav>
       <div class="header__right">
-        <div class="header__desktop-info">
-          <div class="header__socials">${SOCIALS}</div>
-          <a class="header__phone" href="tel:+79508767690">+7 950 876 76 90</a>
-        </div>
         <a class="header__login" href="/login" data-auth-link>Вход</a>
         <button class="burger" aria-label="Открыть меню" aria-expanded="false"><img src="/img/burger.svg" alt=""></button>
       </div>
@@ -257,7 +252,7 @@ function renderChrome() {
           <p style="margin:0"><a href="tel:+79863679819">+ 7 986 367 98 19</a></p>
         </div>
         <div class="footer__col footer__center">
-          <img src="/img/seaweed.svg" alt="">
+          <img src="/img/seaweed.png" alt="">
           <a href="#" data-offer>Оферта/Политика конфиденциальности</a>
         </div>
         <div class="footer__col footer__review">
@@ -371,6 +366,32 @@ function initBubbles() {
   });
 }
 
+/* Анимация пузырьков есть только на страницах «Профиль» и «Ивенты» */
+const BUBBLE_PAGES = /^\/(profile|events)(\.html)?\/?$/;
+const bubblesAllowed = () => BUBBLE_PAGES.test(location.pathname);
+
+/* Пузырьки по краям экрана: поднимаются снизу вверх бесконечно (только профиль и ивенты) */
+function initEdgeBubbles() {
+  if (!bubblesAllowed()) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.createElement('div');
+  box.className = 'edge-bubbles';
+  box.setAttribute('aria-hidden', 'true');
+  const perSide = innerWidth < 761 ? 5 : 9;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  ['left', 'right'].forEach((side) => {
+    for (let i = 0; i < perSide; i++) {
+      const el = document.createElement('span');
+      const dur = rnd(10, 18);
+      el.className = `edge-bubble is-${side}`;
+      el.style.cssText = `--x:${rnd(0.6, 4.5).toFixed(2)}vw;--s:${Math.round(rnd(8, innerWidth < 761 ? 22 : 36))}px;` +
+        `--d:${dur.toFixed(1)}s;--delay:${(-dur * i / perSide - rnd(0, 1.5)).toFixed(1)}s;--sway:${Math.round(rnd(8, 26)) * (side === 'left' ? 1 : -1)}px`;
+      box.append(el);
+    }
+  });
+  document.body.append(box);
+}
+
 renderChrome();
 if (location.pathname === '/login' || location.pathname === '/register') {
   const mode = location.pathname === '/register' ? 'register' : 'login';
@@ -378,4 +399,7 @@ if (location.pathname === '/login' || location.pathname === '/register') {
   history.replaceState(null, '', '/');
   openAuthModal(mode, redirectTo);
 }
-document.addEventListener('DOMContentLoaded', () => { initReveal(); initBubbles(); });
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.toggle('has-bubbles', bubblesAllowed());
+  initReveal(); initBubbles(); initEdgeBubbles();
+});

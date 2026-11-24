@@ -32,7 +32,9 @@
     listEl.innerHTML = news.map((n, i) => `
       <li class="news__item ${i === 0 ? 'is-active' : ''}" tabindex="0" data-i="${i}">${esc(n.title)}</li>`).join('');
 
+    let cur = 0, timer = null;
     const show = (i) => {
+      cur = i;
       $$('.news__item', listEl).forEach((li) => li.classList.toggle('is-active', +li.dataset.i === i));
       const src = '/img/' + news[i].image;
       if (img.getAttribute('src') === src) return;
@@ -42,6 +44,14 @@
     show(0);
 
     listEl.addEventListener('mouseover', (e) => { const li = e.target.closest('.news__item'); if (li) show(+li.dataset.i); });
+    // на телефоне нет наведения: картинка меняется по касанию и с клавиатуры
+    listEl.addEventListener('touchstart', (e) => { const li = e.target.closest('.news__item'); if (li) { show(+li.dataset.i); stopAuto(); } }, { passive: true });
+    listEl.addEventListener('focusin', (e) => { const li = e.target.closest('.news__item'); if (li) show(+li.dataset.i); });
+    // на устройствах без мыши картинки ещё и листаются сами, каждые 4 секунды
+    const stopAuto = () => { clearInterval(timer); timer = null; };
+    if (window.matchMedia('(hover: none)').matches && news.length > 1) {
+      timer = setInterval(() => { cur = (cur + 1) % news.length; show(cur); }, 4000);
+    }
     const openNews = (li) => {
       const n = news[+li.dataset.i];
       openModal(`<h3>${esc(n.title)}</h3>
@@ -89,33 +99,64 @@
         });
       };
 
+      // Тянем карусель только после заметного сдвига пальца/мыши (порог в 8 px), иначе это обычный тап по карточке.
+      // Захват указателя включаем лишь на время перетаскивания — раньше он включался на любом касании,
+      // и клик не доходил до ссылки на мультфильм.
+      const step = 360 / cards.length;
+      const DRAG_THRESHOLD = 8;
+      let startX = 0;
+      const frontIndex = () => (((Math.round(rotation / step)) % cards.length) + cards.length) % cards.length;
+      const snap = () => { rotation = Math.round(rotation / step) * step; updateRing(); };
+      const bringToFront = (i) => {
+        const delta = ((i * step - rotation) % 360 + 540) % 360 - 180; // кратчайший поворот
+        rotation += delta;
+        updateRing();
+      };
+
       row.addEventListener('pointerdown', (event) => {
-        if (event.button !== 0) return;
-        dragX = event.clientX;
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        startX = dragX = event.clientX;
         dragged = false;
-        row.classList.add('is-dragging');
-        row.setPointerCapture(event.pointerId);
       });
       row.addEventListener('pointermove', (event) => {
         if (dragX === null) return;
-        const delta = event.clientX - dragX;
-        if (Math.abs(delta) > 3) dragged = true;
-        rotation -= delta * 0.35;
+        if (!dragged) {
+          if (Math.abs(event.clientX - startX) < DRAG_THRESHOLD) return;
+          dragged = true;
+          dragX = event.clientX; // отсчёт вращения — с момента начала перетаскивания
+          row.classList.add('is-dragging');
+          try { row.setPointerCapture(event.pointerId); } catch (e) { /* не страшно */ }
+          return;
+        }
+        rotation -= (event.clientX - dragX) * 0.35;
         dragX = event.clientX;
         updateRing();
       });
       const endDrag = () => {
+        if (dragX === null) return;
         dragX = null;
         row.classList.remove('is-dragging');
-        if (dragged) setTimeout(() => { dragged = false; }, 0);
+        if (dragged) { snap(); setTimeout(() => { dragged = false; }, 0); }
       };
       row.addEventListener('pointerup', endDrag);
       row.addEventListener('pointercancel', endDrag);
       row.addEventListener('click', (event) => {
-        if (!dragged) return;
-        event.preventDefault();
-        event.stopPropagation();
-        dragged = false;
+        // после перетаскивания клик по ссылке не нужен
+        if (dragged) { event.preventDefault(); event.stopPropagation(); dragged = false; return; }
+        // Боковые карточки повёрнуты в 3D, и браузер часто не считает их целью клика (клик попадает в саму ленту).
+        // Поэтому карточку под пальцем ищем сами, по координатам тапа; при равенстве побеждает та, что ближе к нам.
+        const hit = cards
+          .filter((c) => { const r = c.getBoundingClientRect(); return event.clientX >= r.left && event.clientX <= r.right && event.clientY >= r.top && event.clientY <= r.bottom; })
+          .sort((a, b) => (+b.style.zIndex) - (+a.style.zIndex))[0];
+        if (!hit) return;
+        const i = cards.indexOf(hit);
+        if (i !== frontIndex()) {
+          // тап по боковой карточке выводит её вперёд
+          event.preventDefault(); event.stopPropagation(); bringToFront(i);
+        } else if (!event.target.closest('.poster')) {
+          // тап по центральной открывает мультфильм (если клик не дошёл до самой ссылки)
+          event.preventDefault(); location.href = hit.getAttribute('href');
+        }
       }, true);
       row.addEventListener('keydown', (event) => {
         if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
