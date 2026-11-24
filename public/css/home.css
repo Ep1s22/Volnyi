@@ -162,6 +162,7 @@
   .news__card { position: relative; inset: auto; width: 100%; height: 260px; transform: rotate(3deg); }
   .news__image { left: 50%; transform: translateX(-50%); top: 24px; width: 46%; height: 212px; }
   .news__side { position: relative; inset: auto; width: 100%; }
+  .news__title { color: var(--cream); }
   .news__list { gap: 14px; }
   .news__item { padding: 16px 20px; }
   .catalog { margin-top: 40px; }

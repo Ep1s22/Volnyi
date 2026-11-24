@@ -16,7 +16,7 @@
 }
 /* волны растягиваются на всю ширину, высота — по --gu (совпадает с картами) */
 .ev__back { position: absolute; left: 0; top: calc(20 * var(--gu)); width: 100%; height: calc(1503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; }
-.ev__front { position: absolute; left: 0; top: calc(-76 * var(--gu)); width: 100%; height: calc(503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; z-index: 0; }
+.ev__front { position: absolute; left: 0; top: calc(-76 * var(--gu)); width: 100%; height: calc(503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; z-index: 3; }
 
 /* Игровое поле */
 .game { position: relative; height: calc(1092 * var(--gu)); perspective: 1400px; }

@@ -71,7 +71,7 @@
 .reviews__blob--r { right: -1%;
   bottom: calc(-12 * var(--u));
   width: calc(558 * var(--u));
-  top: 53%; }
+ }
 .reviews__title { position: relative; text-align: center; margin: 0 0 calc(56 * var(--u)); font-size: max(20px, calc(26 * var(--u))); font-weight: 700; }
 .reviews__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: calc(34 * var(--u)) calc(64 * var(--u)); }
 .review {
