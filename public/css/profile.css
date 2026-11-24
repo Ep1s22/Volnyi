@@ -40,6 +40,11 @@
 .profile-hero__nick { position: relative; z-index: 3; margin: calc(2 * var(--pu)) 0 0; font-size: max(16px, calc(30 * var(--pu))); font-weight: 500; color: var(--blue); }
 .profile-hero__actions { position: relative; z-index: 3; margin-top: calc(26 * var(--pu)); display: flex; justify-content: center; }
 .profile-hero__actions .btn { width: calc(300 * var(--pu)); min-width: 170px; height: max(36px, calc(54 * var(--pu))); font-size: max(14px, calc(24 * var(--pu))); }
+.profile-edit-submit.auth__submit {
+  width: 80%; height: calc(68 * var(--u)); min-height: 42px;
+  margin: calc(5 * var(--u)) auto 0; border-radius: calc(21 * var(--u));
+  font-size: max(18px, calc(29 * var(--u)));
+}
 
 /* Уровень */
 .level { align-self: stretch; text-align: left; margin-top: calc(40 * var(--pu)); padding: 0 calc(157 * var(--u)); color: var(--blue); }

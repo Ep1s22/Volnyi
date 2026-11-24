@@ -110,7 +110,7 @@ async function load() {
         <label class="field"><input name="name" maxlength="60" required value="${esc(user.name)}"><span>Имя</span></label>
         <label class="field"><input name="username" maxlength="30" required pattern="@?[A-Za-z0-9_]{3,30}" value="@${esc(user.username)}"><span>@имя — латиница, цифры и _</span></label>
         <label class="field"><input value="${esc(user.email)}" disabled><span>Почта</span></label>
-        <button class="btn btn--small" style="width:100%">Сохранить</button>
+        <button class="auth__submit profile-edit-submit" type="submit">Сохранить</button>
       </form>
       <p style="text-align:center;margin:16px 0 0"><button class="reviews__link" id="logout" style="color:#284D98">Выйти из аккаунта</button></p>`);
     $('#logout', m).onclick = () => Auth.logout();

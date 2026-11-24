@@ -102,7 +102,7 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
     margin-left: auto; margin-right: calc(42 * var(--u));
   }
   .header__desktop-nav a {
-    position: relative; color: var(--cream); font-size: max(14px, calc(20 * var(--u)));
+    position: relative; color: var(--cream); font-size: max(15px, calc(24 * var(--u)));;
     white-space: nowrap; transition: opacity .25s, transform .25s;
   }
   .header__desktop-nav a::after {
@@ -142,7 +142,7 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .menu-open .menu-overlay { opacity: 1; visibility: visible; }
 .menu__top { height: max(56px, calc(97 * var(--u))); background: var(--blue); display: flex; justify-content: flex-end; align-items: center; padding: 0 28px; }
 .menu__top img { width: 40px; }
-.menu__nav { display: flex; flex-direction: column; gap: 22px; padding: 26px 52px; font-size: 20px; }
+.menu__nav { display: flex; flex-direction: column; gap: 22px; padding: 26px 40px; font-size: 20px; }
 .menu__nav a { transition: transform .2s, opacity .2s; width: fit-content; }
 .menu__nav a:hover, .menu__nav a.is-active { transform: translateX(6px); text-shadow: 0 0 1px currentColor; }
 .menu__nav a.is-active::before { content: '~ '; }
@@ -362,20 +362,17 @@ body { background: var(--cream); }
 
 /* ---------- Кнопки «из стекла» ---------- */
 .btn {
-  --glass: rgba(83, 112, 171, .62);
-  position: relative; overflow: hidden; isolation: isolate;
-  color: var(--cream);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.12) 46%, rgba(255,255,255,0) 54%, rgba(255,255,255,.14) 100%),
-    var(--glass);
-  border: 1px solid rgba(255, 255, 255, .55);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.75),
-    inset 0 -3px 8px rgba(20, 40, 90, .22),
-    0 10px 24px -12px rgba(20, 40, 90, .5);
-  -webkit-backdrop-filter: blur(12px) saturate(170%);
-  backdrop-filter: blur(12px) saturate(170%);
-  text-shadow: 0 1px 2px rgba(20, 40, 90, .35);
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  min-height: 48px;
+  margin-top: 8px;
+  border-radius: 14px;
+  background: var(--cream);
+  color: var(--blue);
+  font-size: 16px;
+  font-weight: 700;
+  transition: background .25s var(--ease), color .25s var(--ease), transform .32s var(--ease), box-shadow .32s var(--ease);
 }
 .btn--dark { --glass: rgba(31, 78, 152, .74); }
 /* блик, который пробегает по стеклу при наведении */

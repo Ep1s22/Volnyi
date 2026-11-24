@@ -205,7 +205,7 @@ function openAuthModal(mode = 'login', redirectTo = null) {
 /* ------------------------------------------------ Шапка, меню, подвал */
 const SOCIALS = `
   <a href="https://vk.ru/qwarghosskskst" target="_blank" rel="noopener" aria-label="ВКонтакте"><img src="/img/ic-vk.svg" alt=""></a>
-  <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><img src="/img/ic-inst.svg" alt=""></a>
+  <a href="https://www.instagram.com/linao.ok?knvt=NGR0bmR6aWcyczFu" target="_blank" rel="noopener" aria-label="Instagram"><img src="/img/ic-inst.svg" alt=""></a>
   <a href="https://t.me/balkwhuqos" target="_blank" rel="noopener" aria-label="Telegram"><img src="/img/ic-tg.svg" alt=""></a>`;
 
 function renderChrome() {

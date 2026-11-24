@@ -5,25 +5,28 @@
    от центра, поэтому на широких и низких экранах поле остаётся посередине.
    Всё поле поднято на 76 единиц относительно макета — убран пустой отступ сверху. */
 .ev {
+  --drop: calc(90 * var(--gu));
+  --ck: 1; /* масштаб карточек (центр каждой карточки остаётся на месте) */
   --head: max(56px, calc(97 * var(--u)));
   --gu: min(var(--u), calc((100vh - var(--head)) / 910));
   --gu: min(var(--u), calc((100svh - var(--head)) / 910));
   position: relative;
   background: linear-gradient(180deg,
     var(--cream) 0, #FEFEF5 calc(127 * var(--gu)), rgba(40,77,152,.35) calc(427 * var(--gu)),
-    #5b77ad calc(627 * var(--gu)), #284D98 calc(827 * var(--gu)), #284D98 calc(1027 * var(--gu)),
-    #284D98 calc(1092 * var(--gu)), var(--cream) calc(1092 * var(--gu)));
+    #5b77ad calc(627 * var(--gu)), #284D98 calc(836 * var(--gu) + var(--drop)), #284D98 calc(936 * var(--gu) + var(--drop)),
+    #284D98 calc(1001 * var(--gu) + var(--drop)), var(--cream) calc(1001 * var(--gu) + var(--drop)));
 }
 /* волны растягиваются на всю ширину, высота — по --gu (совпадает с картами) */
-.ev__back { position: absolute; left: 0; top: calc(20 * var(--gu)); width: 100%; height: calc(1503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; }
+.ev__back { position: absolute; left: 0; top: calc(-107 * var(--gu) + var(--drop)); width: 100%; height: calc(1560 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; }
+.ev__ghost { position: absolute; left: 0; top: calc(-59 * var(--gu) + var(--drop)); width: 100%; height: calc(1503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none;  }
 .ev__front { position: absolute; left: 0; top: calc(-76 * var(--gu)); width: 100%; height: calc(503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; z-index: 3; }
 
 /* Игровое поле */
-.game { position: relative; height: calc(1092 * var(--gu)); perspective: 1400px; }
-.game__title { position: absolute; left: 0; right: 0; top: calc(20 * var(--gu)); margin: 0; text-align: center; font-size: max(26px, calc(48 * var(--gu))); font-weight: 700; z-index: 4; }
-.game__side { position: absolute; top: calc(358 * var(--gu)); width: calc(304 * var(--gu)); aspect-ratio: 304 / 429; z-index: 1; transform-style: preserve-3d; }
-.game__side--l { left: calc(50% - 635 * var(--gu)); }
-.game__side--r { left: calc(50% + 333 * var(--gu)); }
+.game { position: relative; height: calc(1001 * var(--gu) + var(--drop)); /* синий блок заканчивается чуть ниже кнопки «Крутить», дальше сразу волна */ perspective: 1400px; }
+.game__title { position: absolute; left: 0; right: 0; top: calc(64 * var(--gu)); margin: 0; text-align: center; font-size: max(26px, calc(48 * var(--gu))); font-weight: 700; z-index: 4; }
+.game__side { position: absolute; top: calc((572.5 - 214.5 * var(--ck)) * var(--gu) + var(--drop)); width: calc(304 * var(--ck) * var(--gu)); aspect-ratio: 304 / 429; z-index: 1; transform-style: preserve-3d; }
+.game__side--l { left: calc(50% - (483 + 152 * var(--ck)) * var(--gu)); }
+.game__side--r { left: calc(50% + (485 - 152 * var(--ck)) * var(--gu)); }
 .game__side--l { transform-origin: right center; }
 .game__side--r { transform-origin: left center; }
 .game__side-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
@@ -56,7 +59,7 @@
 }
 
 /* Центральная карта с переворотом */
-.flip { position: absolute; left: calc(50% - 191 * var(--gu)); top: calc(120 * var(--gu)); width: calc(382 * var(--gu)); aspect-ratio: 382 / 539; perspective: 1400px; z-index: 2; }
+.flip { position: absolute; left: calc(50% - 191 * var(--ck) * var(--gu)); top: calc((389.5 - 269.5 * var(--ck)) * var(--gu) + var(--drop)); width: calc(382 * var(--ck) * var(--gu)); aspect-ratio: 382 / 539; perspective: 1400px; z-index: 2; }
 .flip__inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .8s var(--ease); }
 .flip__face { position: absolute; inset: 0; border-radius: calc(20 * var(--gu)); overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .flip__front { background: var(--grey); display: grid; place-items: center; text-align: center; color: rgba(40,77,152,.4); font-size: max(14px, calc(22 * var(--u))); font-weight: 600; background-size: cover; }
@@ -70,9 +73,9 @@
 .flip.is-legendary .flip__back { box-shadow: 0 0 0 4px #FEFEF5, 0 0 40px 6px rgba(254,254,245,.7); }
 .flip__new { position: absolute; top: 10px; left: 10px; background: #FEFEF5; color: #284D98; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 8px; letter-spacing: .05em; }
 
-.game__controls { position: absolute; left: 0; right: 0; top: calc(808 * var(--gu)); text-align: center; z-index: 4; }
-.game__btn { width: calc(344 * var(--gu)); min-width: 180px; height: max(40px, calc(57 * var(--gu))); font-size: max(18px, calc(32 * var(--gu))); }
-.game__hint { margin: 8px 0 0; color: rgba(254,254,245,.85); font-size: max(13px, calc(16 * var(--gu))); text-shadow: 0 1px 4px rgba(16,34,74,.4); }
+.game__controls { position: absolute; left: 0; right: 0; top: calc(856 * var(--gu) + var(--drop)); text-align: center; z-index: 4; }
+.game__btn { width: calc(344 * var(--gu)); min-width: 180px; height: max(40px, calc(57 * var(--gu))); margin-left: auto; margin-right: auto; font-size: max(18px, calc(32 * var(--gu))); }
+.game__hint { position: absolute; left: 0; right: 0; bottom: 100%; margin: 0 0 10px; color: rgba(254,254,245,.9); font-size: max(13px, calc(16 * var(--gu))); text-shadow: 0 1px 4px rgba(16,34,74,.4); }
 
 /* Архив (макет: y 1264–1708) */
 .archive { position: relative; padding: calc(92 * var(--u)) 0 calc(98 * var(--u)); min-height: calc(610 * var(--u)); }
@@ -97,15 +100,15 @@
 .season figure { margin: 0; text-align: center; font-size: 12px; color: var(--blue-m); }
 .season img { width: 100%; aspect-ratio: 199 / 282; object-fit: cover; border-radius: 10px; margin-bottom: 6px; }
 @media (max-width: 760px) {
-  .game { height: 640px; }
-  .game__side { top: 190px; width: 26%; }
-  .game__side--l { left: 3%; } .game__side--r { left: auto; right: 3%; }
-  .ev__front { top: 0; height: auto; }
-  .ev__back { top: calc(640px - 1116 * var(--gu)); }
-  .flip { left: 50%; transform: translateX(-50%); top: 110px; width: 52%; }
-  .game__controls { top: 520px; }
-  .ev { background: linear-gradient(180deg, var(--cream) 0, rgba(40,77,152,.35) 260px, #284D98 520px, #284D98 640px, var(--cream) 640px); }
+  /* на телефоне игровое поле масштабируется так же, как на компьютере (--gu), поэтому выглядит один в один */
+  .game__title { font-size: max(16px, calc(48 * var(--gu))); }
+  .game__controls { top: calc(770 * var(--gu) + var(--drop)); }
+  .game__btn { width: calc(220 * var(--gu)); min-width: 61px; height: max(19px, calc(37 * var(--gu))); min-height: 30px; padding: 0 8px; font-size: max(10px, calc(21 * var(--gu))); border-radius: 6px; }
+  .game__hint { font-size: max(9px, calc(16 * var(--gu))); margin-bottom: 6px; }
+  .flip__front { font-size: max(9px, calc(22 * var(--gu))); }
+  .archive { padding-top: calc(10 * var(--u) + 56px); }
   .archive__wrap { padding: 0 20px 0 50px; width: 100%; }
   .archive__track { left: 20px; }
   .archive__list { gap: 20px; }
+}
 }
