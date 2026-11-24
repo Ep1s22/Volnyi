@@ -41,9 +41,9 @@
   background: var(--cream); border-radius: calc(26 * var(--u));
   color: var(--blue); font-size: max(22px, calc(36 * var(--u))); font-weight: 700;
   box-shadow: 0 8px 18px -14px rgba(40,77,152,.28);
-  transition: transform .32s var(--ease), box-shadow .32s var(--ease);
+  transition: background .25s var(--ease), color .25s var(--ease), transform .32s var(--ease), box-shadow .32s var(--ease);
 }
-.auth__submit:hover { transform: translateY(-2px); box-shadow: 0 18px 28px -14px rgba(40,77,152,.42); }
+.auth__submit:hover { background: var(--blue); color: var(--cream); transform: translateY(-2px); box-shadow: 0 18px 28px -14px rgba(40,77,152,.42); }
 .auth__submit:disabled { opacity: .6; transform: none; }
 
 /* 404 (макет: y 97–1080) */

@@ -28,6 +28,15 @@ if is_new:
     db.commit()
     print("База данных создана и заполнена: db/volnuy.db")
 
+for old_title, title in (
+    ("Создание анимационной студии ВОЛНУЙ. Какие ценности студии?", "Волнуй"),
+    ("Ожидается анонс первого мультфильма. Что ждать от новой студии?", "Буря?"),
+    ("Вышел анонс первого мультфильма “Буря” от студии анимации ВОЛНУЙ", "Внутренняя буря"),
+):
+    db.execute("UPDATE news SET title = ? WHERE title = ?", (title, old_title))
+db.execute("UPDATE news SET image = 'logo-blue.png' WHERE id = 1 AND image IN ('posters/mayak.png', 'posters/mayak.jpg')")
+db.commit()
+
 PAGES = {
     "/": "index.html",
     "/film": "film.html",

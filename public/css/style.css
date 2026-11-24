@@ -190,7 +190,7 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 }
 .footer__review form.has-text button { opacity: 1; transform: none; pointer-events: auto; }
 .footer__line { background: var(--blue); padding: calc(36 * var(--u)) calc(162 * var(--u)) calc(64 * var(--u)); }
-.footer__line hr { border: 0; margin: 0; }
+.footer__line hr { height: 1px; border: 0; margin: 0; background: rgba(254, 254, 245, .72); }
 
 /* ---------- Кнопка «наверх» ---------- */
 .to-top {
@@ -224,7 +224,7 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .modal__close:hover { background: var(--grey); }
 .modal h3 { margin: 0 0 14px; font-size: 26px; }
 .modal p { margin: 0 0 14px; line-height: 1.5; color: var(--blue-m); }
-.auth-modal__box { width: min(500px, 100%); padding: 38px 20px 20px; background: linear-gradient(140deg, rgba(196, 205, 226, .96), rgba(222, 228, 236, .96) 55%, rgba(206, 214, 232, .96)); }
+.auth-modal__box { width: min(500px, 100%); padding: 38px 20px 20px; background: linear-gradient(140deg, rgba(196, 205, 226, .76), rgba(222, 228, 236, .68) 55%, rgba(206, 214, 232, .76)); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .auth-modal { min-height: 0; display: block; padding: 0; }
 .auth-modal .auth__panel { width: 100%; min-width: 0; padding: 16px; border-radius: 18px; background: transparent; box-shadow: none; animation: none; backdrop-filter: none; }
 .auth-modal .auth__card { min-height: 0; padding: 20px 24px 24px; border-radius: 18px; background: var(--cream); }
@@ -237,8 +237,8 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .auth-modal .field span { margin-top: 4px; font-size: 13px; }
 .auth-modal .auth__demo { margin: 0; color: #a7adb9; font-size: 12px; line-height: 1.5; }
 .auth-modal .auth__error { min-height: 1.3em; margin: 12px 0 0; color: #b3364a; font-size: 13px; }
-.auth-modal .auth__submit { display: block; width: 100%; height: auto; min-height: 48px; margin-top: 8px; border-radius: 14px; background: var(--blue); color: var(--cream); font-size: 16px; font-weight: 700; }
-.auth-modal .auth__submit:hover { background: var(--blue-d); }
+.auth-modal .auth__submit { display: block; width: 100%; height: auto; min-height: 48px; margin-top: 8px; border-radius: 14px; background: var(--cream); color: var(--blue); font-size: 16px; font-weight: 700; transition: background .25s var(--ease), color .25s var(--ease), transform .32s var(--ease), box-shadow .32s var(--ease); }
+.auth-modal .auth__submit:hover { background: var(--blue); color: var(--cream); }
 
 .field { display: block; margin-bottom: 18px; }
 .field input, .field textarea { width: 100%; border: 0; border-bottom: 1px solid var(--blue); background: transparent; padding: 8px 2px; font-size: 18px; outline: none; color: var(--blue); }
@@ -276,8 +276,6 @@ button { cursor: pointer; border: 0; background: none; padding: 0; }
 .poster { border-radius: calc(12 * var(--u)); overflow: hidden; position: relative; background: var(--blue-m); box-shadow: 0 8px 18px -14px rgba(10, 25, 60, .35); transition: transform .32s var(--ease), box-shadow .32s var(--ease); }
 .poster img { width: 100%; height: 100%; object-fit: cover; }
 .poster:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: 0 18px 30px -16px rgba(10, 25, 60, .7); }
-.poster__badge { position: absolute; left: 8px; top: 8px; background: rgba(254, 254, 245, .92); color: var(--blue); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 8px; letter-spacing: .02em; }
-
 /* ---------- Мобильная версия (общие элементы) ---------- */
 @media (max-width: 760px) {
   .header { padding: 0 18px; }
@@ -362,8 +360,8 @@ body { background: var(--cream); }
    Стеклянные кнопки, круглые стеклянные кнопки, пузырьки по краям
    ===================================================================== */
 
-/* ---------- Кнопки «из стекла» (все .btn и кнопки входа/регистрации) ---------- */
-.btn, .auth__submit, .auth-modal .auth__submit {
+/* ---------- Кнопки «из стекла» ---------- */
+.btn {
   --glass: rgba(83, 112, 171, .62);
   position: relative; overflow: hidden; isolation: isolate;
   color: var(--cream);
@@ -380,14 +378,13 @@ body { background: var(--cream); }
   text-shadow: 0 1px 2px rgba(20, 40, 90, .35);
 }
 .btn--dark { --glass: rgba(31, 78, 152, .74); }
-.auth__submit { --glass: rgba(40, 77, 152, .7); }
 /* блик, который пробегает по стеклу при наведении */
-.btn::after, .auth__submit::after {
+.btn::after {
   content: ''; position: absolute; z-index: -1; top: -20%; bottom: -20%; left: -70%; width: 45%;
   background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
   transform: skewX(-20deg); transition: left .75s var(--ease); pointer-events: none;
 }
-.btn:hover, .btn--dark:hover, .auth__submit:hover, .auth-modal .auth__submit:hover {
+.btn:hover, .btn--dark:hover {
   background:
     linear-gradient(180deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.16) 46%, rgba(255,255,255,0) 54%, rgba(255,255,255,.16) 100%),
     var(--glass);
@@ -396,7 +393,7 @@ body { background: var(--cream); }
     inset 0 -3px 8px rgba(20, 40, 90, .22),
     0 16px 30px -14px rgba(20, 40, 90, .6);
 }
-.btn:hover::after, .auth__submit:hover::after { left: 130%; }
+.btn:hover::after { left: 130%; }
 .btn:focus-visible { box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 0 0 4px rgba(254, 254, 245, .9); }
 
 /* ---------- Плоская кнопка (как на макете): сплошная заливка #5370ab, кремовый текст, без стекла и тени ---------- */
@@ -411,8 +408,8 @@ body { background: var(--cream); }
 .btn--flat:disabled, .btn--flat:disabled:hover { background: #5370ab; opacity: .55; transform: none; }
 .btn--flat:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; box-shadow: none; }
 
-/* ---------- Круглые стеклянные кнопки (как «наверх»): все одинаковые и «дышат» по кругу ---------- */
-.to-top, .cards__arrow, .film-hero__play {
+/* ---------- Круглые стеклянные кнопки ---------- */
+.to-top, .film-hero__play {
   border-radius: 50%;
   background:
     radial-gradient(circle at 32% 26%, rgba(255,255,255,.8) 0 7%, rgba(255,255,255,.22) 28%, rgba(255,255,255,0) 56%),
@@ -425,15 +422,18 @@ body { background: var(--cream); }
   -webkit-backdrop-filter: blur(8px) saturate(160%);
   backdrop-filter: blur(8px) saturate(160%);
 }
-.to-top:hover, .cards__arrow:hover {
+.to-top:hover {
   background:
     radial-gradient(circle at 32% 26%, rgba(255,255,255,.9) 0 7%, rgba(255,255,255,.28) 28%, rgba(255,255,255,0) 56%),
     rgba(40, 77, 152, .7);
 }
-.to-top, .cards__arrow { animation: glass-bob 3.6s ease-in-out infinite; }
-.cards__arrow:last-child { animation-delay: -1.8s; }
+.to-top { animation: glass-bob 3.6s ease-in-out infinite; }
 @keyframes glass-bob { 50% { translate: 0 -4px; } }
-.cards__arrow { width: max(40px, calc(57 * var(--u))); height: auto; aspect-ratio: 1; }
+.cards__arrow {
+  width: max(40px, calc(57 * var(--u))); height: auto; aspect-ratio: 1;
+  border: 0; border-radius: 50%; background: transparent; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
 .cards__arrow svg { width: 50%; stroke: var(--cream); }
 
 /* ---------- Пузырьки по краям экрана (создаются в common.js) ---------- */

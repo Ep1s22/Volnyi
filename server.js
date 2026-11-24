@@ -36,6 +36,15 @@ const q = {
   run: (sql, ...p) => db.prepare(sql).run(...p),
 };
 
+[
+  ['Создание анимационной студии ВОЛНУЙ. Какие ценности студии?', 'Волнуй'],
+  ['Ожидается анонс первого мультфильма. Что ждать от новой студии?', 'Буря?'],
+  ['Вышел анонс первого мультфильма “Буря” от студии анимации ВОЛНУЙ', 'Внутренняя буря'],
+].forEach(([oldTitle, title]) => {
+  q.run('UPDATE news SET title = ? WHERE title = ?', title, oldTitle);
+});
+q.run("UPDATE news SET image = 'logo-blue.png' WHERE id = 1 AND image IN ('posters/mayak.png', 'posters/mayak.jpg')");
+
 /* --------------------------------------------------------- Опыт и уровни */
 const XP = { view: 10, review: 15, spin: 5, newCard: 20 };
 const addXp = (userId, amount) => q.run('UPDATE users SET xp = xp + ? WHERE id = ?', amount, userId);

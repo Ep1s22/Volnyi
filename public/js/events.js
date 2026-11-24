@@ -83,11 +83,15 @@ $('#archive').addEventListener('click', async (e) => {
   }
   openModal(`<h3>Волнение — 1 сезон</h3>
     <p>Крутите карту до ${ev.active.spins_per_day} раз в день и соберите всю коллекцию. Новая карточка — +20 опыта.</p>
-    <div class="season">${ev.cards.map((c) => `
-      <figure class="${owned.has(c.id) || !Auth.user ? '' : 'is-locked'}">
-        <img src="/img/posters/${esc(c.image)}" alt="">
-        <figcaption><b>${esc(c.name)}</b><br>${RARITY[c.rarity]}</figcaption>
-      </figure>`).join('')}</div>`);
+    <div class="season">${ev.cards.map((c) => {
+      const locked = Auth.user && !owned.has(c.id);
+      const image = locked ? '3.jpg' : c.image;
+      return `
+        <figure class="${locked ? 'is-locked' : ''}">
+          <img src="/img/posters/${esc(image)}" alt="${locked ? 'Обложка «Волнуй»' : ''}">
+          <figcaption><b>${esc(c.name)}</b><br>${RARITY[c.rarity]}</figcaption>
+        </figure>`;
+    }).join('')}</div>`);
 });
 
 load();

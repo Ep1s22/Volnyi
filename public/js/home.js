@@ -69,11 +69,13 @@
   try {
     const { films } = await api('/api/films');
     const catalogFilms = films.slice(0, 4);
-    row.innerHTML = catalogFilms.map((f) => `
-      <a class="poster" href="/film?id=${f.id}" title="${esc(f.title)}">
-        <img src="/img/posters/${esc(f.poster)}" alt="${esc(f.title)}">
-        ${f.status === 'soon' ? '<span class="poster__badge">Скоро</span>' : ''}
-      </a>`).join('');
+    row.innerHTML = catalogFilms.map((f) => {
+      const poster = f.poster === 'vodovorot.jpg' || f.poster === 'zagranyu.jpg' ? f.poster : '3.jpg';
+      return `
+        <a class="poster" href="/film?id=${f.id}" title="${esc(f.title)}">
+          <img src="/img/posters/${esc(poster)}" alt="${esc(f.title)}">
+        </a>`;
+    }).join('');
 
     if (catalogFilms.length > 1) {
       let rotation = 0;
