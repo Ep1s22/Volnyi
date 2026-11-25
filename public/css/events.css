@@ -1,80 +1,228 @@
 /* ===================== Ивенты: карточная игра «Волнение» ===================== */
 /* Первый блок (заголовок, карты, кнопка «Крутить») всегда помещается в один экран.
-   --gu — «пиксель макета» для игрового поля: как --u, но не больше, чем позволяет
-   высота окна (видимая часть поля ≈ 910 единиц). По горизонтали всё считается
-   от центра, поэтому на широких и низких экранах поле остаётся посередине.
-   Всё поле поднято на 76 единиц относительно макета — убран пустой отступ сверху. */
+--gu — «пиксель макета» для игрового поля: как --u, но не больше, чем позволяет
+высота окна (видимая часть поля ≈ 910 единиц). По горизонтали всё считается
+от центра, поэтому на широких и низких экранах поле остаётся посередине.
+Всё поле поднято на 76 единиц относительно макета — убран пустой отступ сверху. */
 .ev {
   --drop: calc(90 * var(--gu));
-  --ck: 1; /* масштаб карточек (центр каждой карточки остаётся на месте) */
+  --bg-scale: 1;
+  --ck: 1.1; /* Увеличили масштаб карточек на 10% */
   --head: max(56px, calc(97 * var(--u)));
-  --gu: min(var(--u), calc((100vh - var(--head)) / 910));
-  --gu: min(var(--u), calc((100svh - var(--head)) / 910));
+  /* весь верхний блок уменьшен на 15% (×.85); --gb — прежний масштаб, нужен картинкам-декору, чтобы они не сплющивались */
+  --gu: calc(min(var(--u), calc((100vh - var(--head)) / 910)) * .85);
+  --gu: calc(min(var(--u), calc((100svh - var(--head)) / 910)) * .85);
+  --gb: calc(var(--gu) / .85);
+  --ex: calc(30 * var(--gu)); /* запас под удлинённые карточки */
   position: relative;
+  top: -5vh;
+  margin-bottom: -5vh;
+  transform: scaleY(.9);
+  transform-origin: top center;
   background: linear-gradient(180deg,
-    var(--cream) 0, #FEFEF5 calc(127 * var(--gu)), rgba(40,77,152,.35) calc(427 * var(--gu)),
-    #5b77ad calc(627 * var(--gu)), #284D98 calc(836 * var(--gu) + var(--drop)), #284D98 calc(936 * var(--gu) + var(--drop)),
-    #284D98 calc(1001 * var(--gu) + var(--drop)), var(--cream) calc(1001 * var(--gu) + var(--drop)));
+    var(--cream) 0, #FEFEF5 calc(127 * var(--gu) * var(--bg-scale)), rgba(40,77,152,.35) calc(427 * var(--gu) * var(--bg-scale)),
+    #5b77ad calc(627 * var(--gu) * var(--bg-scale)), #284D98 calc(836 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--ex)), #284D98 calc(936 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--ex)),
+    #284D98 calc(1001 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--ex)), var(--cream) calc(1001 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--ex)));
 }
-/* волны растягиваются на всю ширину, высота — по --gu (совпадает с картами) */
-.ev__back { position: absolute; left: 0; top: calc(-109 * var(--gu) + var(--drop)); width: 100%; height: calc(1560 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; }
-.ev__ghost { position: absolute; left: 0; top: calc(-59 * var(--gu) + var(--drop)); width: 100%; height: calc(1503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none;  }
-.ev__front { position: absolute; left: 0; top: calc(-76 * var(--gu)); width: 100%; height: calc(503 * var(--gu)); max-width: none; object-fit: fill; pointer-events: none; z-index: 3; }
+
+/* Волны и фоновые изображения */
+.ev__back { 
+  position: absolute;
+  left: 0;
+  top: calc(-390 * var(--gu) + var(--drop) + var(--ex));
+  width: 100%;
+  height: calc(1800 * var(--gu)); /* Увеличил высоту, чтобы покрыть весь экран */
+  max-width: none;
+  object-fit: cover; /* Сохраняет пропорции, заполняя пространство */
+  pointer-events: none;
+  display: block;
+  z-index: 0;
+}/* Помещаем строго на задний план */
+
+
+.ev__ghost { 
+  position: absolute; 
+  left: -9%; 
+  top: calc(-130 * var(--gu) + var(--drop)); 
+  width: 100%; 
+  height: calc(1503 * var(--gb)); 
+  max-width: none; 
+  object-fit: fill; 
+  pointer-events: none;  
+}
+
+.ev__front { 
+  position: absolute; 
+  left: 10%; 
+  top: calc(-120 * var(--gu));  
+  width: 100%; 
+  height: calc(503 * var(--gb)); 
+  max-width: none; 
+  object-fit: fill; 
+  pointer-events: none; 
+  z-index: 3; 
+}
 
 /* Игровое поле */
-.game { position: relative; height: calc(1001 * var(--gu) + var(--drop)); /* синий блок заканчивается чуть ниже кнопки «Крутить», дальше сразу волна */ perspective: 1400px; }
-.game__title { position: absolute; left: 0; right: 0; top: calc(64 * var(--gu)); margin: 0; text-align: center; font-size: max(26px, calc(48 * var(--gu))); font-weight: 700; z-index: 4; }
-.game__side { position: absolute; top: calc((572.5 - 214.5 * var(--ck)) * var(--gu) + var(--drop)); width: calc(304 * var(--ck) * var(--gu)); aspect-ratio: 304 / 429; z-index: 1; transform-style: preserve-3d; }
+.game { 
+  position: relative; 
+  height: calc(1001 * var(--gu) + var(--drop) + var(--ex)); /* синий блок заканчивается чуть ниже кнопки «Крутить», дальше сразу волна */ 
+  perspective: 1400px; 
+}
+
+.game__title { 
+  position: absolute; 
+  left: 0; 
+  right: 0; 
+  top: calc(64 * var(--gu));  
+  margin: 1%; 
+  text-align: center; 
+  font-size: max(26px, calc(48 * var(--gu))); 
+  font-weight: 700; 
+  z-index: 4; 
+  transform: scaleY(1.12); 
+  transform-origin: center; 
+}
+
+.game__side { 
+  position: absolute; 
+  top: calc((572.5 - 235.95 * var(--ck)) * var(--gu) + var(--drop)); 
+  width: calc(304 * var(--ck) * var(--gu)); 
+  aspect-ratio: 304 / 471.9; 
+  z-index: 1; 
+  transform-style: preserve-3d; 
+  margin-top: 3%;
+}
+
 .game__side--l { left: calc(50% - (483 + 152 * var(--ck)) * var(--gu)); }
 .game__side--r { left: calc(50% + (485 - 152 * var(--ck)) * var(--gu)); }
 .game__side--l { transform-origin: right center; }
 .game__side--r { transform-origin: left center; }
-.game__side-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
-.game__side-face { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: calc(16 * var(--gu)); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+.game__side-inner { 
+  position: relative; 
+  width: 100%; 
+  height: 100%; 
+  transform-style: preserve-3d; 
+}
+
+.game__side-face { 
+  position: absolute; 
+  inset: 0; 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: calc(16 * var(--gu)); 
+  backface-visibility: hidden; 
+  -webkit-backface-visibility: hidden; 
+}
+
 .game__side-face--reverse { transform: rotateY(180deg); }
+
 .is-spinning .game__side { will-change: transform; animation-duration: 3.6s; animation-timing-function: var(--ease); animation-fill-mode: both; }
 .is-spinning .game__side--l { animation-name: roulette-bow-l; }
 .is-spinning .game__side--r { animation-name: roulette-bow-r; }
 .is-spinning .game__side--l .game__side-inner { animation: roulette-spin-l 3.6s cubic-bezier(.3,.1,.25,1) both; }
 .is-spinning .game__side--r .game__side-inner { animation: roulette-spin-r 3.6s cubic-bezier(.3,.1,.25,1) both; }
+
 @keyframes roulette-bow-l {
-  0%, 18% { transform: translate(0, 0) rotate(0) scale(1); animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
+  0%, 18% { transform: translate(0, 0) rotate(0) scale(1); animation-timing-function: cubic-bezier(.37, 0, .63, 1); } 
   48% { transform: translate(28%, 4%) rotate(15deg) scale(.94); animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
   54% { transform: translate(28%, 4%) rotate(15deg) scale(.94); animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
   100% { transform: translate(0, 0) rotate(0) scale(1); }
 }
+
 @keyframes roulette-bow-r {
   0%, 18% { transform: translate(0, 0) rotate(0) scale(1); animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
   48% { transform: translate(-28%, 4%) rotate(-15deg) scale(.94); animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
   54% { transform: translate(-28%, 4%) rotate(-15deg) scale(.94); animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
   100% { transform: translate(0, 0) rotate(0) scale(1); }
 }
+
 @keyframes roulette-spin-l {
   0% { transform: rotateY(0); }
   100% { transform: rotateY(360deg); }
 }
+
 @keyframes roulette-spin-r {
   0% { transform: rotateY(0); }
   100% { transform: rotateY(-360deg); }
 }
 
 /* Центральная карта с переворотом */
-.flip { position: absolute; left: calc(50% - 191 * var(--ck) * var(--gu)); top: calc((389.5 - 269.5 * var(--ck)) * var(--gu) + var(--drop)); width: calc(382 * var(--ck) * var(--gu)); aspect-ratio: 382 / 539; perspective: 1400px; z-index: 2; }
-.flip__inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .8s var(--ease); }
-.flip__face { position: absolute; inset: 0; border-radius: calc(20 * var(--gu)); overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.flip__front { background: var(--grey); display: grid; place-items: center; text-align: center; color: rgba(40,77,152,.4); font-size: max(14px, calc(22 * var(--u))); font-weight: 600; background-size: cover; }
+.flip { 
+  position: absolute; 
+  left: calc(50% - 191 * var(--ck) * var(--gu)); 
+  top: calc((389.5 - 296.45 * var(--ck)) * var(--gu) + var(--drop)); 
+  width: calc(382 * var(--ck) * var(--gu)); 
+  aspect-ratio: 382 / 592.9; 
+  perspective: 1400px; 
+  z-index: 2; 
+}
+
+.flip__inner { 
+  position: relative; 
+  width: 100%; 
+  height: 100%; 
+  transform-style: preserve-3d; 
+  transition: transform .8s var(--ease); 
+}
+
+.flip__face { 
+  position: absolute; 
+  inset: 0; 
+  border-radius: calc(20 * var(--gu)); 
+  overflow: hidden; 
+  backface-visibility: hidden; 
+  -webkit-backface-visibility: hidden; 
+}
+
+.flip__front { 
+  background: var(--grey); 
+  display: grid; 
+  place-items: center; 
+  text-align: center; 
+  color: rgba(40,77,152,.4); 
+  font-size: max(14px, calc(22 * var(--u))); 
+  font-weight: 600; 
+  background-size: cover; 
+}
+
 .flip__front.is-pattern { background-image: url(../img/cards/back.jpg); color: transparent; }
-.flip__back { transform: rotateY(180deg); background: var(--blue); box-shadow: none; }
+
+.flip__back { 
+  transform: rotateY(180deg); 
+  background: var(--blue); 
+  box-shadow: none; 
+}
+
 .flip__back img { width: 100%; height: 100%; object-fit: cover; }
-.flip__caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 14px 12px; text-align: center; color: var(--cream); font-weight: 700; font-size: max(14px, calc(22 * var(--u))); background: linear-gradient(transparent, rgba(40,77,152,.85)); }
+
+.flip__caption { 
+  position: absolute; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  padding: 30px 14px 12px; 
+  text-align: center; 
+  color: var(--cream); 
+  font-weight: 700; 
+  font-size: max(14px, calc(22 * var(--u))); 
+  background: linear-gradient(transparent, rgba(40,77,152,.85)); 
+}
+
 .flip__caption .rarity { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 9px; background: var(--grey); color: var(--blue-m); }
 .flip__caption .rarity--rare { background: #FEFEF5; color: var(--blue); }
 .flip__caption .rarity--legendary { background: linear-gradient(90deg, #FEFEF5, #FEFEF5); color: #284D98; }
+
 .flip.is-legendary .flip__back { box-shadow: 0 0 0 4px #FEFEF5, 0 0 40px 6px rgba(254,254,245,.7); }
+
 .flip__new { position: absolute; top: 10px; left: 10px; background: #FEFEF5; color: #284D98; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 8px; letter-spacing: .05em; }
 
-.game__controls { position: absolute; left: 0; right: 0; top: calc(856 * var(--gu) + var(--drop)); text-align: center; z-index: 4; }
+.game__controls { position: absolute; left: 0; right: 0; top: calc(856 * var(--gu) + var(--drop) + var(--ex)); text-align: center; z-index: 4; }
+
 .game__btn { width: calc(344 * var(--gu)); min-width: 180px; height: max(40px, calc(57 * var(--gu))); margin-left: auto; margin-right: auto; font-size: max(18px, calc(32 * var(--gu))); }
+
 .game__hint { position: absolute; left: 0; right: 0; bottom: 100%; margin: 0 0 10px; color: rgba(254,254,245,.9); font-size: max(13px, calc(16 * var(--gu))); text-shadow: 0 1px 4px rgba(16,34,74,.4); }
 
 /* Архив (макет: y 1264–1708) */
@@ -84,6 +232,7 @@
 .archive__track { position: absolute; left: calc(222 * var(--u)); top: 0; bottom: 0; width: calc(17 * var(--u)); min-width: 8px; background: var(--blue-m); border-radius: 99px; }
 .archive__thumb { position: absolute; left: -22%; right: -22%; top: 10%; height: 48%; background: var(--blue); border-radius: 99px; }
 .archive__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: calc(98 * var(--u)); }
+
 .archive__item {
   width: 100%; height: max(38px, calc(48 * var(--u))); border-radius: 99px;
   background: var(--blue-m); color: rgba(254,254,245,.65);
@@ -92,6 +241,7 @@
   box-shadow: 0 8px 18px -14px rgba(40,77,152,.28);
   transition: transform .32s var(--ease), background .32s var(--ease), box-shadow .32s var(--ease);
 }
+
 .archive__item.is-active { background: var(--blue); color: var(--cream); }
 .archive__item.is-active:hover { transform: scale(1.015); background: #284D98; box-shadow: 0 14px 24px -16px rgba(40,77,152,.42); }
 .archive__item:disabled { cursor: default; }
@@ -99,16 +249,54 @@
 .season { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 14px; margin-top: 10px; }
 .season figure { margin: 0; text-align: center; font-size: 12px; color: var(--blue-m); }
 .season img { width: 100%; aspect-ratio: 199 / 282; object-fit: cover; border-radius: 10px; margin-bottom: 6px; }
+
 @media (max-width: 760px) {
-  /* на телефоне игровое поле масштабируется так же, как на компьютере (--gu), поэтому выглядит один в один */
-  .game__title { font-size: max(16px, calc(48 * var(--gu))); }
-  .game__controls { top: calc(770 * var(--gu) + var(--drop)); }
-  .game__btn { width: calc(220 * var(--gu)); min-width: 61px; height: max(19px, calc(37 * var(--gu))); min-height: 30px; padding: 0 8px; font-size: max(10px, calc(21 * var(--gu))); border-radius: 6px; }
-  .game__hint { font-size: max(9px, calc(16 * var(--gu))); margin-bottom: 6px; }
-  .flip__front { font-size: max(9px, calc(22 * var(--gu))); }
+  /* Мобильная версия игрового поля: без растягивания по вертикали (scaleY), без сдвига под шапку.
+     --gu считается от ширины экрана так, чтобы три карты (боковые + центральная) помещались целиком. */
+  .ev {
+    --gu: calc(100vw / 1216 * .85);
+    --ex: calc(30 * var(--gu) + 24px);
+    --bg-scale: 1.1;
+    --drop: calc(90 * var(--gu) + 20px);
+    --tail: 44px; /* синий запас под кнопкой: волна стоит в самом конце верхнего блока */
+    top: 0; margin-bottom: 0; transform: none;
+    background: linear-gradient(180deg,
+      var(--cream) 0, #FEFEF5 calc(127 * var(--gu) * var(--bg-scale)), rgba(40,77,152,.35) calc(427 * var(--gu) * var(--bg-scale)),
+      #5b77ad calc(627 * var(--gu) * var(--bg-scale)),
+      #284D98 calc(836 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--tail) + var(--ex)),
+      #284D98 calc(936 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--tail) + var(--ex)),
+      #284D98 calc(1001 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--tail) + var(--ex)),
+      var(--cream) calc(1001 * var(--gu) * var(--bg-scale) + var(--drop) * var(--bg-scale) + var(--tail) + var(--ex)));
+  }
+  /* фон-волна: на всю ширину экрана без обрезки (пропорции файла 1596×1503), плоская кромка полосы
+     (≈71% высоты картинки) ложится на конец синего градиента */
+  .ev__back {
+    width: 100%; height: calc(100vw * 1503 / 1596); object-fit: fill;
+    top: calc((1001 * var(--gu) + var(--drop)) * var(--bg-scale) + var(--tail) + var(--ex) - 12px - 100vw * .6696);
+  }
+  .game { height: calc(1001 * var(--gu) + var(--drop) + 44px + var(--tail) + var(--ex)); transform: none; margin-bottom: 0; }
+  .game__title { top: 18px; font-size: 24px; transform: none; }
+  /* боковые карты ближе к центральной, чтобы поле стало шире и ничего не обрезалось */
+  .game__side--l { left: calc(50% - 568 * var(--gu)); }
+  .game__side--r { left: calc(50% + 234 * var(--gu)); }
+  .game__controls { top: calc(856 * var(--gu) + var(--drop) + var(--ex) + 14px); transform: none; }
+  .game__btn {
+    width: min(260px, 72vw); min-width: 180px;
+    height: 48px; min-height: 48px; padding: 0 24px;
+    font-size: 16px; border-radius: 14px; margin-top: 0;
+  }
+  .game__hint { font-size: 13px; margin-bottom: 10px; }
+  .flip__front { font-size: 14px; }
+
   .archive { padding-top: calc(10 * var(--u) + 56px); }
   .archive__wrap { padding: 0 20px 0 50px; width: 100%; }
   .archive__track { left: 20px; }
   .archive__list { gap: 20px; }
+  .archive__item { height: auto; min-height: max(38px, calc(48 * var(--u))); padding: 8px 10px; line-height: 1.2; white-space: normal; }
 }
+/* ---------- Правка размеров: убрана лишняя пустота под архивом ----------
+   .ev сжат по вертикали (scaleY .9), а место в потоке осталось прежним —
+   под архивом появлялся пустой отступ. Меняем только высоту блока архива. */
+@media (min-width: 761px) {
+  .archive { min-height: 0; height: calc(493 * var(--u)); }
 }

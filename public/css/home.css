@@ -29,7 +29,15 @@
   color: var(--blue-d); max-width: calc(840 * var(--u));
   animation: rise 1s var(--ease) both .15s;
 }
-.hero__btn { margin: calc(36 * var(--u)) 0 0 calc(7 * var(--u)); height: max(34px, calc(58 * var(--u))); font-size: max(13px, calc(29 * var(--u))); padding: 0 calc(24 * var(--u)); border-radius: calc(12 * var(--u)); animation: rise 1s var(--ease) both .3s; }
+.hero__btn {
+  margin: calc(36 * var(--u)) 0 0 calc(7 * var(--u));
+  height: max(40px, calc(58 * var(--u)));
+  font-size: max(20px, calc(29 * var(--u)));
+  font-weight: 400; /* normal — обычный, не жирный */
+  padding: 0 calc(24 * var(--u));
+  border-radius: calc(12 * var(--u));
+  animation: rise 1s var(--ease) both .3s;
+}
 /* на макете кнопка плоская: сплошная заливка, без стекла, блика и тени */
 .hero__btn, .hero__btn:hover {
   background: var(--blue-d); color: var(--cream); border: 0; text-shadow: none; box-shadow: none;
@@ -66,7 +74,7 @@
 }
 
 /* Новости (y 1672–2504). Карточка 1171×631 повёрнута на 10.4° */
-.news { position: relative; height: calc(852 * var(--u)); margin-top: calc(115 * var(--u)); }
+.news { position: relative; height: calc(920 * var(--u)); margin-top: calc(72 * var(--u)); } /* блок новостей поднят на 5% своей высоты (было 115) */
 .news__card {
   position: absolute; width: calc(1171 * var(--u)); height: calc(631 * var(--u));
   left: calc((944 - 162 - 585.5) * var(--u)); top: calc((2088 - 1672 - 315.5) * var(--u));
@@ -105,7 +113,7 @@
 .catalog__row.is-ring.is-dragging .poster { transition-duration: 0s; }
 .catalog__row:focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; }
 .catalog__btn { text-align: center; margin-top: calc(78 * var(--u)); }
-.catalog__btn .btn { width: calc(402 * var(--u)); min-width: 180px; }
+.catalog__btn .btn { width: calc(402 * var(--u)); min-width: 180px; font-size: 20px; }
 
 /* ---------- Кассовый сбор (y 3423–4204) ---------- */
 .fund {
@@ -158,7 +166,7 @@
   .values__track { display: none; }
   .values__list { margin: 0; width: 100%; height: 340px; gap: 13.6px; }
   .values__item { width: 100%; padding: 18.7px; min-height: 136px; }
-  .news { height: auto; margin-top: 40px; padding: 0 20px; display: flex; flex-direction: column; gap: 24px; }
+  .news { height: auto; margin-top: 12px; padding: 0 20px; display: flex; flex-direction: column; gap: 24px; }
   .news__card { position: relative; inset: auto; width: 100%; height: 260px; transform: rotate(3deg); }
   .news__image { left: 50%; transform: translateX(-50%); top: 24px; width: 46%; height: 212px; }
   .news__side { position: relative; inset: auto; width: 100%; }
@@ -175,7 +183,7 @@
 
 /* ---------- Облака-векторы на первом экране (Vector1 — слева, Vector2 — справа сверху) ---------- */
 .hero__cloud { position: absolute; z-index: 5; max-width: none; pointer-events: none; }
-.hero__cloud--1 { top: 65%; width: calc(40% * 539 / 539); transform: translateX(-40%); }
+.hero__cloud--1 { top: 61%; width: calc(40% * 539 / 539); transform: translateX(-40%); }
 .hero__cloud--2 { right: -2%; top: 3.5%; width: calc(104% * 786 / 1920); }
 .hero__content { z-index: 4; }
 
@@ -216,3 +224,10 @@
 }
 @media (max-width: 760px) { .news__card { --tilt: 3deg; transform-origin: 24px 24px; } }
 @media (prefers-reduced-motion: reduce) { .news__card { animation: none; } }
+
+/* ---------- Правка размеров: первый экран с волной целиком помещается в окно ----------
+   Высота блока ограничена высотой окна за вычетом шапки (только на компьютере).
+   Волна прижата к низу блока, поэтому теперь видна сразу, без прокрутки. */
+@media (min-width: 761px) {
+  .hero { width: 100%; max-height: calc(100svh - max(56px, calc(97 * var(--frame) / 1596))); min-height: 460px; }
+}
